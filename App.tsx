@@ -10,7 +10,6 @@
 
 import 'react-native-gesture-handler';
 import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 
 import {
   SafeAreaView,
@@ -33,7 +32,7 @@ import {Root} from './app/Root';
 
 declare var global: {HermesInternal: null | {}};
 
-const App = () => {
+const App = (props: any) => {
   const a = {
     b: {
       c: 123,
@@ -46,7 +45,7 @@ const App = () => {
   return (
     <>
       <Provider>
-        <Root></Root>
+        <Root initialProperties={props || {}}></Root>
       </Provider>
     </>
   );

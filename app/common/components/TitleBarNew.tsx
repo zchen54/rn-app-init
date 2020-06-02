@@ -238,7 +238,6 @@ const TitleStyle = StyleSheet.create({
   rightText: {
     fontSize: 16,
     color: '#FFFEFE',
-    marginRight: 18,
     justifyContent: 'center',
   },
   rightImage: {

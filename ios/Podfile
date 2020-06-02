@@ -1,8 +1,8 @@
 platform :ios, '9.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-target 'LCP' do
-  # Pods for LCP
+target 'Data2Go' do
+  # Pods for Data2Go
   pod 'FBLazyVector', :path => "../node_modules/react-native/Libraries/FBLazyVector"
   pod 'FBReactNativeSpec', :path => "../node_modules/react-native/Libraries/FBReactNativeSpec"
   pod 'RCTRequired', :path => "../node_modules/react-native/Libraries/RCTRequired"
@@ -34,7 +34,7 @@ target 'LCP' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  target 'LCPTests' do
+  target 'Data2GoTests' do
     inherit! :search_paths
     # Pods for testing
   end
@@ -42,10 +42,10 @@ target 'LCP' do
   use_native_modules!
 end
 
-target 'LCP-tvOS' do
-  # Pods for LCP-tvOS
+target 'Data2Go-tvOS' do
+  # Pods for Data2Go-tvOS
 
-  target 'LCP-tvOSTests' do
+  target 'Data2Go-tvOSTests' do
     inherit! :search_paths
     # Pods for testing
   end

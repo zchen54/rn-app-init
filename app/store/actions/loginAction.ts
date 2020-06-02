@@ -1,4 +1,4 @@
-import { loginTypeConstants } from "../types";
+import {loginTypeConstants} from '../types';
 
 export const signUp = (
   formData: {
@@ -6,38 +6,48 @@ export const signUp = (
     password: string;
     vcode: string;
   },
-  callback: Function
+  callback: Function,
 ) => ({
   type: loginTypeConstants.SIGN_UP,
   formData,
-  callback
+  callback,
 });
 
 export const login = (
   username: string,
   password: string,
-  callback: Function
+  captcha?: string,
+  callback?: Function,
 ) => ({
   type: loginTypeConstants.LOGIN,
   username,
   password,
-  callback
+  captcha,
+  callback,
+});
+
+export const addLoginFailedCount = () => ({
+  type: loginTypeConstants.ADD_LOGIN_FAILED_COUNT,
+});
+
+export const clearLoginFailedCount = () => ({
+  type: loginTypeConstants.CLEAR_LOGIN_FAILED_COUNT,
 });
 
 export const loginSuccess = (currentUserInfo: Array<any>) => ({
   type: loginTypeConstants.LOGIN_SUCCESS,
-  currentUserInfo
+  currentUserInfo,
 });
 
 export const logout = (authToken: string, callback?: Function) => ({
   type: loginTypeConstants.LOGOUT,
   authToken,
-  callback
+  callback,
 });
 
 export const updateCurrentUserInfo = (currentUserInfo: any) => ({
   type: loginTypeConstants.UPDATE_CURRENT_USER_INFO,
-  currentUserInfo
+  currentUserInfo,
 });
 
 // change user info
@@ -45,9 +55,9 @@ export const changeUserInfo = (
   authToken: string,
   nickName: string,
   userPic: string,
-  gender: number,
+  gender: number | undefined,
   phone: string | undefined,
-  callback?: Function
+  callback?: Function,
 ) => ({
   type: loginTypeConstants.CHANGE_USER_INFO,
   authToken,
@@ -55,32 +65,32 @@ export const changeUserInfo = (
   userPic,
   gender,
   phone,
-  callback
+  callback,
 });
 
 export const changeUserInfoSuccess = (
   nickName: string,
   userPic: string,
   gender: number,
-  phone: string
+  phone: string,
 ) => ({
   type: loginTypeConstants.CHANGE_USER_INFO_SUCCESS,
   nickName,
   userPic,
   gender,
-  phone
+  phone,
 });
 
 // 获取验证码
 export const getVCode = (
   email: string,
   codeType: number,
-  callback?: Function
+  callback?: Function,
 ) => ({
   type: loginTypeConstants.GET_VCODE,
   email,
   codeType,
-  callback
+  callback,
 });
 
 // 忘记密码
@@ -88,13 +98,13 @@ export const resetPassword = (
   email: string,
   vcode: string,
   password: string,
-  callback?: Function
+  callback?: Function,
 ) => ({
   type: loginTypeConstants.RESET_PASSWORD,
   email,
   vcode,
   password,
-  callback
+  callback,
 });
 
 // 修改密码
@@ -102,19 +112,19 @@ export const changePassword = (
   authToken: string,
   oldPassword: string,
   password: string,
-  callback?: Function
+  callback?: Function,
 ) => ({
   type: loginTypeConstants.CHANGE_PASSWORD,
   authToken,
   oldPassword,
   password,
-  callback
+  callback,
 });
 
 export const fetchUserRole = (authToken: string, callback?: Function) => ({
   type: loginTypeConstants.FETCH_USER_ROLE,
   authToken,
-  callback
+  callback,
 });
 
 export const sendfeedBack = (
@@ -124,23 +134,23 @@ export const sendfeedBack = (
     images: Array<string>;
     email: string;
   },
-  callback: Function
+  callback: Function,
 ) => ({
   type: loginTypeConstants.SEND_FEEDBACK,
   authToken,
   options,
-  callback
+  callback,
 });
 
 export const fetchAllData = (
   authToken: string,
   isShowToast: boolean,
   callback?: Function,
-  isFrozen?: boolean
+  isFrozen?: boolean,
 ) => ({
   type: loginTypeConstants.FETCH_ALL_DATA,
   authToken,
   isShowToast,
   callback,
-  isFrozen
+  isFrozen,
 });

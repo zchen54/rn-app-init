@@ -81,6 +81,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-code-push/android/codepush.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -128,11 +129,13 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.lcp"
+        applicationId "com.data2go"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 31
+        versionName "1.4.1"
+        missingDimensionStrategy 'react-native-camera', 'general'
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -149,15 +152,79 @@ android {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
         }
+        release {
+            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
+                storeFile file(MYAPP_RELEASE_STORE_FILE)
+                storePassword MYAPP_RELEASE_STORE_PASSWORD
+                keyAlias MYAPP_RELEASE_KEY_ALIAS
+                keyPassword MYAPP_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     buildTypes {
+        // 开发环境
         debug {
-            signingConfig signingConfigs.debug
+            buildConfigField "boolean", "IS_DEBUG", "true"
+            buildConfigField "boolean", "IS_BETA", "true"
+            //为debug版本的包名添加.debug后缀
+            applicationIdSuffix ".debug"
+            // 设置manifest占位符，为了显示不同的软件名
+            manifestPlaceholders = [
+                APP_NAME : "@string/app_name_debug"
+            ]
+            // Note: CodePush updates should not be tested in Debug mode as they are overriden by the RN packager. However, because CodePush checks for updates in all modes, we must supply a key.
+            buildConfigField "String", "CODEPUSH_KEY", '""'
         }
+        
+        // 测试环境
+        // beta {
+        //     buildConfigField "boolean", "IS_DEBUG", "false"
+        //     buildConfigField "boolean", "IS_BETA", "true"
+        //     //为beta版本的包名添加.beta后缀
+        //     applicationIdSuffix ".beta"
+        //     // 设置manifest占位符，为了显示不同的软件名
+        //     manifestPlaceholders = [
+        //         APP_NAME : "@string/app_name_beta"
+        //     ]
+        //     buildConfigField "String", "CODEPUSH_KEY", '"Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv"'
+        //     signingConfig signingConfigs.release
+        //     minifyEnabled enableProguardInReleaseBuilds
+        //     proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        //     buildConfigField "String", "CODEPUSH_KEY", '"Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv"'
+        //     matchingFallbacks = ['beta', 'debug', 'release']
+        // }
+
+        // 生产环境
         release {
+            
+            // ==========Beta======================
+            // 不是开发环境，不是测试环境，所以是生产环境
+            buildConfigField "boolean", "IS_DEBUG", "false"
+            buildConfigField "boolean", "IS_BETA", "true"
+            //为beta版本的包名添加.beta后缀
+            applicationIdSuffix ".beta"
+            // 设置manifest占位符，为了显示不同的软件名
+            manifestPlaceholders = [
+                APP_NAME : "@string/app_name_beta"
+            ]
+            buildConfigField "String", "CODEPUSH_KEY", '"Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv"'
+            // ==========Beta-END===================
+
+            // // ==========Release======================
+            // // 不是开发环境，不是测试环境，所以是生产环境
+            // buildConfigField "boolean", "IS_DEBUG", "false"
+            // buildConfigField "boolean", "IS_BETA", "false"
+            // // 设置manifest占位符，为了显示不同的软件名
+            // manifestPlaceholders = [
+            //     APP_NAME : "@string/app_name"
+            // ]
+            // buildConfigField "String", "CODEPUSH_KEY", '"29ccTwr8evNW0KlA9VQWf-NWrNj09I7gslXb3"'
+            // // ==========Release-END===================
+
+
             // Caution! In production, you need to generate your own keystore file.
             // see https://facebook.github.io/react-native/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -181,6 +248,15 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation(project(':react-native-maps')){
+       exclude group: 'com.google.android.gms', module: 'play-services-base'
+       exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+
+    implementation "com.google.android.gms:play-services-base:15.0.1"
+    implementation "com.google.android.gms:play-services-maps:15.0.1"
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

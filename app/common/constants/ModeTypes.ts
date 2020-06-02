@@ -1,4 +1,4 @@
-import { string } from "prop-types";
+import {string} from 'prop-types';
 
 export interface ModelType {
   User_pKey_Creator: string;
@@ -57,6 +57,19 @@ export interface TemplateType {
   linkable: boolean;
   isDefault?: boolean;
   hiddenFields: string[];
+  isSharing?: boolean;
+  hiddenSection?: boolean;
+  sendEmails?: string; // 发送邮箱的邮件
+  department?: string; // 所属部门，创建时写入
+  departmentName?: string;
+  actionableDepartments?: string[]; // 可操作的部门
+  privacyStaffs?: string[]; // 可以查看隐藏字段的员工
+  actionableAll?: boolean; // true: 所有人都有权限操作
+  approval?: any;
+  task?: any;
+  taskId?: string;
+  isTop?: boolean;
+  label?: string;
 }
 
 export interface ReportType {
@@ -85,6 +98,12 @@ export interface ReportType {
   isDefault?: boolean;
   anonymityType?: string; // web_user || qr_user
   hiddenFields: string[];
+  isTemplateSharing?: boolean;
+  hiddenSection?: boolean;
+  template?: any;
+  task?: any;
+  approval?: any;
+  taskId?: string;
 }
 
 export interface SectionType {
@@ -107,6 +126,7 @@ export interface FieldType {
   property: FieldPropertyType;
   FieldPosition?: FieldPositionType;
   FieldTableProperty?: FieldTablePropertyType;
+  isLinked?: boolean;
 }
 
 export interface FieldPositionType {
@@ -134,7 +154,7 @@ export interface TableFieldType {
 
 export interface FieldPropertyType {
   required: boolean;
-  pdpa: boolean;
+  privacy?: boolean;
   options: string[];
   defaultValue: string;
   maximum: number;
@@ -151,6 +171,12 @@ export interface FieldPropertyType {
   templateId?: string;
   linkedReportId?: string;
   fieldId?: string;
+  internalData?: boolean;
+  pictureNumber?: number;
+  videoNumber?: number;
+  currencyUnit?: string;
+  sendEmail?: boolean;
+  fileName?: string;
 }
 
 export interface FormDataType {
@@ -192,114 +218,122 @@ export interface FriendsType {
 }
 
 export const commonObj: ModelType = {
-  User_pKey_Creator: "",
-  User_pKey_Modifier: "",
-  createdAt: "",
-  updatedAt: ""
+  User_pKey_Creator: '',
+  User_pKey_Modifier: '',
+  createdAt: '',
+  updatedAt: '',
 };
 
 export const newTemplate: ModelType & TemplateType = {
   ...commonObj,
-  pKey: "",
-  Name: "",
-  Remark: "",
+  pKey: '',
+  Name: '',
+  Remark: '',
   showCode: false,
-  CreatorName: "",
-  companyName: "",
-  customizeKey: "",
+  CreatorName: '',
+  companyName: '',
+  customizeKey: '',
   ActiveStatus: 1,
   UploadStatus: 0,
-  codeType: "",
-  color: "",
-  _id: "",
+  codeType: '',
+  color: '',
+  _id: '',
   shelveStatus: false,
   linkable: false,
   Sections: [],
-  hiddenFields: []
+  hiddenFields: [],
 };
 
 export const newSection: SectionType = {
-  _id: "",
-  Name: "Section1",
+  _id: '',
+  Name: 'Section1',
   Order: 1,
-  Remark: "",
-  Fields: []
+  Remark: '',
+  Fields: [],
 };
 
 export const newReport: ModelType & ReportType = {
   ...commonObj,
-  pKey: "",
-  code: "",
-  Name: "",
-  TemplatepKey: "",
+  pKey: '',
+  code: '',
+  Name: '',
+  TemplatepKey: '',
   showCode: false,
-  customizeKey: "",
-  location: "",
+  customizeKey: '',
+  location: '',
   UploadStatus: 0,
   Sections: [],
-  CreatorName: "",
-  companyName: "",
-  CreatorPic: "",
-  Remark: "",
-  creatorStaffId: "",
-  departmentId: "",
-  departmentName: "",
-  codeType: "",
-  color: "",
+  CreatorName: '',
+  companyName: '',
+  CreatorPic: '',
+  Remark: '',
+  creatorStaffId: '',
+  departmentId: '',
+  departmentName: '',
+  codeType: '',
+  color: '',
   storageSize: 0,
-  hiddenFields: []
+  hiddenFields: [],
 };
 
 export const newFieldData: FormDataType = {
-  _id: "",
-  fieldKey: "",
+  _id: '',
+  fieldKey: '',
   Order: 1,
-  Type: "",
-  FieldName: "",
-  FieldValue: "",
-  Remark: "",
+  Type: '',
+  FieldName: '',
+  FieldValue: '',
+  Remark: '',
   TableFieldDataList: [],
   property: {
     required: false,
-    pdpa: false,
+    privacy: false,
     options: [],
-    defaultValue: "",
+    defaultValue: '',
     maximum: 0,
     minimum: 0,
     maxLength: 0,
     minLength: 0,
-    placeHolder: "",
+    placeHolder: '',
     videoTime: 0, // 单位 s
     autoCompleteFromStaffName: false,
     autoCompleteFromStaffId: false,
     autoCompleteCreationTime: false,
     customOption: false,
-    decimalPlaces: 0
-  }
+    decimalPlaces: 0,
+    internalData: false,
+    pictureNumber: 1,
+    videoNumber: 1,
+    currencyUnit: '',
+  },
 };
 
 export const newTableFieldData: TableFieldDataType = {
-  _id: "",
-  tableFieldKey: "",
+  _id: '',
+  tableFieldKey: '',
   Order: 1,
-  Type: "",
-  FieldName: "",
-  Remark: "",
+  Type: '',
+  FieldName: '',
+  Remark: '',
   FieldValueList: [],
   property: {
     required: false,
-    pdpa: false,
+    privacy: false,
     options: [],
-    defaultValue: "",
+    defaultValue: '',
     maximum: 0,
     minimum: 0,
     maxLength: 0,
     minLength: 0,
-    placeHolder: "",
+    placeHolder: '',
     autoCompleteFromStaffName: false,
     autoCompleteFromStaffId: false,
     autoCompleteCreationTime: false,
     customOption: false,
-    decimalPlaces: 0
-  }
+    decimalPlaces: 0,
+    internalData: false,
+    pictureNumber: 1,
+    videoNumber: 1,
+    currencyUnit: '',
+  },
 };

@@ -11,5 +11,6 @@ export {default as NavigationService} from './navigationService';
 export * from './androidPermissionRequest';
 export * from './searchType';
 export * from './pinying';
-export * from './checkNewVersion';
 export * from './mediaPicker';
+export * from './checkNewVersion';
+export * from './googlePlaceUtils';

@@ -5,7 +5,7 @@
  * @return {number} 保留n位小数 不足补0
  */
 export const toDecimal = (value: string, decimalPlaces: number = 0) => {
-  let str = "";
+  let str = '';
   if (decimalPlaces) {
     let number: any = value;
     if (isNaN(number)) {
@@ -14,14 +14,14 @@ export const toDecimal = (value: string, decimalPlaces: number = 0) => {
       const base = Math.pow(10, decimalPlaces);
       let float = Math.round(number * base) / base;
       str = float.toString();
-      let rs = str.indexOf(".");
+      let rs = str.indexOf('.');
       if (decimalPlaces !== 0) {
         if (rs < 0) {
           rs = str.length;
-          str += ".";
+          str += '.';
         }
         while (str.length <= rs + decimalPlaces) {
-          str += "0";
+          str += '0';
         }
       }
     }
@@ -38,11 +38,11 @@ export const toDecimal = (value: string, decimalPlaces: number = 0) => {
 export const getIn = (
   collection: any,
   keyPath: Array<any>,
-  notSetValue?: any
+  notSetValue?: any,
 ): any =>
   keyPath.reduce(
     (rlt, keyIndex) => (rlt && rlt[keyIndex] ? rlt[keyIndex] : null),
-    collection
+    collection,
   ) || notSetValue;
 
 /**
@@ -54,10 +54,10 @@ export const getIn = (
 export const getInPro = (
   collection: any,
   keyPath: Array<any>,
-  notSetValue?: any
+  notSetValue?: any,
 ): any =>
   keyPath.reduce((rlt, keyIndex) => {
-    if (typeof keyIndex === "function" && Array.isArray(rlt)) {
+    if (typeof keyIndex === 'function' && Array.isArray(rlt)) {
       let tempRlt;
       rlt.forEach((item, index) => {
         if (keyIndex(item)) {
@@ -113,20 +113,20 @@ export const fuzzySearchTools = (needle: string, haystack: string) => {
 };
 
 export const backgroundColorEnum = [
-  "#5CCAA1",
-  "#957DBD",
-  "#FFA400",
-  "#00C0CA",
-  "#98C555",
-  "#F34D44",
-  "#FF959B",
-  "#E67373",
-  "#E6AC73",
-  "#79B6F2",
-  "#AC73E5",
-  "#E573AC",
-  "#79F2B6",
-  "#7979F2"
+  '#5CCAA1',
+  '#957DBD',
+  '#FFA400',
+  '#00C0CA',
+  '#98C555',
+  '#F34D44',
+  '#FF959B',
+  '#E67373',
+  '#E6AC73',
+  '#79B6F2',
+  '#AC73E5',
+  '#E573AC',
+  '#04d984',
+  '#7979F2',
 ];
 
 export const randomTemplateColor = () => {

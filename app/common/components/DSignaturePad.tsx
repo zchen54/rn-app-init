@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   StyleSheet,
   Text,
@@ -7,19 +7,19 @@ import {
   TouchableOpacity,
   Modal as RnModal,
   Platform,
-  TouchableWithoutFeedback,
-} from 'react-native';
-import SignatureCapture from 'react-native-signature-capture';
+  TouchableWithoutFeedback
+} from "react-native";
+import SignatureCapture from "react-native-signature-capture";
 import {
   Button,
   Modal,
   WhiteSpace,
   WingBlank,
   Toast,
-  Provider,
-} from '@ant-design/react-native';
-import Orientation from 'react-native-orientation';
-import {DColors, DFontSize, FONT_FAMILY} from '../styles';
+  Provider
+} from "@ant-design/react-native";
+import Orientation from "react-native-orientation";
+import { DColors, DFontSize, FONT_FAMILY } from "../styles";
 import {
   statusBarHeight,
   setSize, // 设置宽高
@@ -28,12 +28,12 @@ import {
   setSizeWithPx, // 设置字体 px 转 dp
   uploadImage,
   API_v2,
-  isNetworkConnected,
-} from '../utils';
-import {ErrorMessage_Network_Offline, PlatFormAndroid} from '../../env';
-import {TitleBarNew} from './TitleBarNew';
+  isNetworkConnected
+} from "../utils";
+import { ErrorMessage_Network_Offline, PlatFormAndroid } from "../../env";
+import { TitleBarNew } from "./TitleBarNew";
 
-const deleteImg = require('../../containers/images/template/delete-gray.png');
+const deleteImg = require("../../containers/images/template/delete-gray.png");
 
 interface State {
   modalVisible: boolean;
@@ -49,7 +49,7 @@ export class DSignaturePad extends React.Component<Props, State> {
   SignatureDom: any;
   constructor(props: Props) {
     super(props);
-    this.state = {modalVisible: false, connected: false};
+    this.state = { modalVisible: false, connected: false };
   }
 
   componentWillMount() {}
@@ -68,9 +68,9 @@ export class DSignaturePad extends React.Component<Props, State> {
           //   }
           // });
 
-          this.setState({modalVisible: true, connected: true});
+          this.setState({ modalVisible: true, connected: true });
         } else {
-          this.setState({modalVisible: true, connected: false});
+          this.setState({ modalVisible: true, connected: false });
         }
       })
       .catch(error => {
@@ -89,24 +89,24 @@ export class DSignaturePad extends React.Component<Props, State> {
     //   }
     // });
 
-    this.setState({modalVisible: false});
+    this.setState({ modalVisible: false });
   };
 
   handleDelete = () => {
-    Modal.alert('Delete signature ?', '', [
+    Modal.alert("Delete signature ?", "", [
       {
-        text: 'Cancel',
+        text: "Cancel",
         onPress: () => {
-          console.log('cancel');
+          console.log("cancel");
         },
-        style: 'cancel',
+        style: "cancel"
       },
       {
-        text: 'OK',
+        text: "OK",
         onPress: () => {
-          this.props.handleConfirm('');
-        },
-      },
+          this.props.handleConfirm("");
+        }
+      }
     ]);
   };
 
@@ -119,40 +119,41 @@ export class DSignaturePad extends React.Component<Props, State> {
   };
 
   _onSaveEvent = (result: any) => {
-    const {authToken} = this.props;
-    const {connected} = this.state;
+    const { authToken } = this.props;
+    const { connected } = this.state;
     // console.log(result);
     if (connected) {
       uploadImage(
         API_v2.uploadFile,
-        ['file://' + result.pathName],
-        authToken,
+        ["file://" + result.pathName],
+        authToken
       ).then((res: any) => {
-        console.log('Response =---- ', res);
-        if (res.result === 'Success') {
+        console.log("Response =---- ", res);
+        if (res.result === "Success") {
           this.props.handleConfirm(res.data[0]);
         }
       });
     } else {
-      this.props.handleConfirm('file://' + result.pathName);
+      this.props.handleConfirm("file://" + result.pathName);
     }
     this.handleClose();
   };
 
   render() {
-    const {modalVisible} = this.state;
-    const {source, pickerStyle} = this.props;
+    const { modalVisible } = this.state;
+    const { source, pickerStyle } = this.props;
     // console.log("render signature", source, deviceWidth, deviceHeight);
     return (
       <View style={styles.container}>
-        {!source || source === '' ? (
+        {!source || source === "" ? (
           <TouchableOpacity
             style={
               pickerStyle
                 ? [styles.defaultView, pickerStyle]
                 : styles.defaultView
             }
-            onPress={this.handleOpen}>
+            onPress={this.handleOpen}
+          >
             <Text>Click here to sign</Text>
           </TouchableOpacity>
         ) : (
@@ -161,7 +162,8 @@ export class DSignaturePad extends React.Component<Props, State> {
               pickerStyle
                 ? [styles.signatureView, pickerStyle]
                 : styles.signatureView
-            }>
+            }
+          >
             <Image
               style={
                 pickerStyle
@@ -169,7 +171,7 @@ export class DSignaturePad extends React.Component<Props, State> {
                   : styles.signatureImage
               }
               source={{
-                uri: source,
+                uri: source
               }}
             />
             <TouchableOpacity
@@ -177,7 +179,8 @@ export class DSignaturePad extends React.Component<Props, State> {
               onPress={() => {
                 this.handleDelete();
               }}
-              style={styles.deleteBtn}>
+              style={styles.deleteBtn}
+            >
               <Image style={styles.deleteIcon} source={deleteImg} />
             </TouchableOpacity>
           </View>
@@ -223,10 +226,11 @@ export class DSignaturePad extends React.Component<Props, State> {
         <RnModal
           visible={modalVisible}
           transparent={true}
-          animationType="slide">
+          animationType="slide"
+        >
           <View style={styles.modalWrapper}>
             <TitleBarNew
-              title={'Signature'}
+              title={"Signature"}
               navigation={null}
               pressLeft={this.handleClose}
               isStatusBAr={Platform.OS === PlatFormAndroid ? true : false}
@@ -268,41 +272,41 @@ export class DSignaturePad extends React.Component<Props, State> {
 export const signatureHeight = (500 / 984) * (deviceWidth - 32);
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
     // borderColor: "red",
     // borderWidth: 1
   },
   defaultView: {
     width: deviceWidth - 32,
     height: signatureHeight,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
     // borderColor: "green",
     // borderWidth: 1
   },
   signatureView: {
     width: deviceWidth - 32,
     height: signatureHeight,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
-    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
+    borderWidth: 1
   },
   signatureImage: {
     width: deviceWidth - 32,
-    height: signatureHeight,
+    height: signatureHeight
   },
   SignatureCaptureView: {
-    flex: 1,
+    flex: 1
   },
   labelText: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingHorizontal: 20,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   signature: {
     width: deviceWidth - 32,
@@ -311,53 +315,53 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     marginLeft: 16,
     borderWidth: 1,
-    borderColor: '#9D9D9D',
+    borderColor: "#9D9D9D"
   },
   signatureWrap: {
     width: deviceWidth,
     height: deviceHeight,
-    paddingVertical: 100,
+    paddingVertical: 100
   },
   buttonStyle: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     height: 50,
-    backgroundColor: '#f2f2f2',
-    margin: 10,
+    backgroundColor: "#f2f2f2",
+    margin: 10
   },
   deleteBtn: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
-    top: 0,
+    top: 0
   },
   deleteIcon: {
     width: setSizeWithPx(60),
-    height: setSizeWithPx(60),
+    height: setSizeWithPx(60)
   },
   modalWrapper: {
     width: deviceWidth,
     height: deviceHeight,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: "#F2F2F2"
   },
   buttonWrapper: {
     marginTop: 40,
     width: deviceWidth,
     paddingLeft: 33,
     paddingRight: 33,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   button: {
     width: 95,
     height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: DColors.mainColor,
-    borderRadius: 3.33,
+    borderRadius: 3.33
   },
   text: {
     fontSize: 16,
-    color: '#FFFFFF',
-  },
+    color: "#FFFFFF"
+  }
 });

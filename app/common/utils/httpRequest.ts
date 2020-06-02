@@ -181,7 +181,7 @@ export const httpRequest = (
                     ],
                   );
                 }
-                console.error(error);
+                // console.error(error);
                 return {RCode: -1, RMsg: 'Server error !'};
               })
           );
@@ -399,14 +399,21 @@ export const generateGetUrl = (url: string, params: any) => {
   if (params) {
     let paramsArray: Array<string> = [];
     //拼接参数
-    Object.keys(params).forEach(key =>
-      paramsArray.push(key + '=' + params[key]),
-    );
+    Object.keys(params).forEach(key => {
+      if (Array.isArray(params[key])) {
+        params[key].forEach((item: string) => {
+          paramsArray.push(`${key}[]=${params[key]}`);
+        });
+      } else {
+        paramsArray.push(`${key}=${params[key]}`);
+      }
+    });
     if (url.search(/\?/) === -1) {
       url += '?' + paramsArray.join('&');
     } else {
       url += '&' + paramsArray.join('&');
     }
+    console.log('url', url);
   }
   return url;
 };
