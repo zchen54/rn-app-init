@@ -245,7 +245,7 @@ export class ScanQRCode extends Component<Props, State> {
       noData: false,
       storageOptions: {
         skipBackup: true,
-        path: 'data2goImages',
+        path: 'LcpImages',
       },
     };
     ImagePicker.launchImageLibrary(options, (response: any) => {

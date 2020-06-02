@@ -129,11 +129,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.data2go"
+        applicationId "com.seacos.lcp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 31
-        versionName "1.4.1"
+        versionCode 1
+        versionName "0.0.1"
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true
     }

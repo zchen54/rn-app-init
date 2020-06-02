@@ -66,7 +66,7 @@
 		00E356EE1AD99517003FC87E /* LCPTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LCPTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* LCPTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LCPTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* LCP-Beta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "LCP-Beta.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* LCP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LCP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = LCP/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = LCP/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = LCP/Images.xcassets; sourceTree = "<group>"; };
@@ -242,7 +242,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* LCP-Beta.app */,
+				13B07F961A680F5B00A75B9A /* LCP.app */,
 				00E356EE1AD99517003FC87E /* LCPTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* LCP-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* LCP-tvOSTests.xctest */,
@@ -462,7 +462,7 @@
 			);
 			name = LCP;
 			productName = LCP;
-			productReference = 13B07F961A680F5B00A75B9A /* LCP-Beta.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* LCP.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* LCP-tvOS */ = {
@@ -889,7 +889,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 4ABCCQAP56;
 				HEADER_SEARCH_PATHS = (
@@ -933,14 +933,14 @@
 				);
 				INFOPLIST_FILE = LCP/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Seacos.LCP.test;
-				PRODUCT_NAME = "LCP-Beta";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seacos.lcp;
+				PRODUCT_NAME = LCP;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -954,7 +954,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 4ABCCQAP56;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -997,14 +997,14 @@
 				);
 				INFOPLIST_FILE = LCP/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.4.1;
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.Seacos.LCP.test;
-				PRODUCT_NAME = "LCP-Beta";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seacos.lcp;
+				PRODUCT_NAME = LCP;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -1,4 +1,4 @@
-package com.data2go;
+package com.lcp;
 
 import android.app.Application;
 import android.content.Context;
@@ -21,7 +21,7 @@ public class MainApplication extends Application implements ReactApplication {
     // bundle location from on each app start
     @Override
     protected String getJSBundleFile() {
-    return CodePush.getJSBundleFile();
+      return CodePush.getJSBundleFile();
     }
 
     @Override

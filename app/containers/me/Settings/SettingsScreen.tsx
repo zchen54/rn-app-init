@@ -196,7 +196,7 @@ export class SettingsScreen extends Component<Props, State> {
                 borderTopColor: '#D9D9D9',
                 borderTopWidth: 1,
               }}>
-              <Text style={styles.itemText}>About Data2Go</Text>
+              <Text style={styles.itemText}>About LCP</Text>
               <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image
                   style={{...styles.enterStyle, tintColor: '#B3B3B3'}}

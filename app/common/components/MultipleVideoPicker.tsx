@@ -73,7 +73,7 @@ export class MultipleVideoPicker extends Component<Props, State> {
       videoQuality: 'low',
       storageOptions: {
         skipBackup: true,
-        path: 'data2goVideos',
+        path: 'LcpVideos',
         cameraRoll: true,
         waitUntilSaved: true,
       },
