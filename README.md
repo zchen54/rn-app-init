@@ -23,7 +23,7 @@ yarn run ios
   // .apk will output at ./android/app/build/outputs/apk/beta
 
   // App Center code push
-  appcenter codepush release-react -a Allsworth-ZhuChen/Data2Go-android --description '更新日志'
+  appcenter codepush release-react -a Allsworth-ZhuChen/LCP-android --description '更新日志'
 ```
 
 > 生产环境
@@ -42,7 +42,7 @@ yarn run ios
   // .apk will output at ./android/app/build/outputs/apk/release
 
   // App Center code push
-  appcenter codepush release-react -a Allsworth-ZhuChen/Data2Go-android -d Production --description '更新日志'
+  appcenter codepush release-react -a Allsworth-ZhuChen/LCP-android -d Production --description '更新日志'
 
   // Use Android App Bundle for Google Play
   ./gradlew bundleRelease
@@ -60,8 +60,8 @@ yarn run ios
   export const releaseMode = false;
 
 // Xcode -> target -> General -> Identity
-//    Display Name: Data2Go-Beta
-//    Bundle Identifier: com.Seacos.Data2Go.test
+//    Display Name: LCP-Beta
+//    Bundle Identifier: com.Seacos.LCP.test
 //    CodePushDeploymentKey: f7KnDdTstHsQ0bEpJkw1j5S7roMUb3f9OmhA-
 
   yarn run bundle-ios
@@ -78,8 +78,8 @@ yarn run ios
   export const releaseMode = true;
 
 // Xcode -> target -> General -> Identity
-//    Display Name: Data2Go
-//    Bundle Identifier: com.Seacos.Data2Go
+//    Display Name: LCP
+//    Bundle Identifier: com.Seacos.LCP
 //    Version: [like 1.0 | 2.0 for Major update, 1.1 | 1.2 for Minor update, 1.0.1 | 1.0.2 for Debug]
 //    Build: [like 1, 2, 3, 4 and Automatic incremental]
 //    CodePushDeploymentKey: 6fnlOAhn1XJP3LSd8Zh2cGOIZ3qqtYgIBFCr8

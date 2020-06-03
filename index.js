@@ -11,7 +11,7 @@ import {releaseMode, PlatFormAndroid} from './app/env';
 
 console.disableYellowBox = true;
 
-const Data2Go = props => {
+const LCP = props => {
   useEffect(() => {
     if (Platform.OS === PlatFormAndroid) {
       RNBootSplash.hide({duration: 250});
@@ -20,13 +20,13 @@ const Data2Go = props => {
 
   return (
     <Provider>
-      <Root initialProperties={props || {}}></Root>
-      <CodePushUpdateModal></CodePushUpdateModal>
+      <Root initialProperties={props || {}} />
+      <CodePushUpdateModal />
     </Provider>
   );
 };
 
-AppRegistry.registerComponent(appName, () => Data2Go);
+AppRegistry.registerComponent(appName, () => LCP);
 
 // let codePushOptions = {
 //   //设置检查更新的频率
@@ -37,5 +37,5 @@ AppRegistry.registerComponent(appName, () => Data2Go);
 // };
 
 // AppRegistry.registerComponent(appName, () =>
-//   CodePush(codePushOptions)(Data2Go),
+//   CodePush(codePushOptions)(LCP),
 // );

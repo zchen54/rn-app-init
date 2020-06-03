@@ -1,6 +1,6 @@
 //
 //  RNBridgeManager.m
-//  Data2Go
+//  LCP
 //
 //  Created by Allsworth on 2020/3/25.
 //  Copyright © 2020 Facebook. All rights reserved.
