@@ -22,9 +22,9 @@ import {
   clearUserInfo,
 } from './common/utils';
 import {Toast, Icon, Modal, Button, Portal} from '@ant-design/react-native';
-import {NewVersionModal, ActionSheet} from './common/components';
+import {NewVersionModal, ActionSheet, ImagePreview} from './common/components';
 import {InitialState as CommonStateType} from './store/reducers/commonReducer';
-import {closeActionSheet} from './store/actions';
+import {closeActionSheet, closeImagePreview} from './store/actions';
 const iOSToolModule = NativeModules.ToolModule;
 
 interface Props {
@@ -119,6 +119,9 @@ const AppWrapper = (props: Props) => {
     actionSheetVisible,
     actionSheetTitle,
     actionSheetActions,
+    imagePreviewVisible,
+    imagePreviewIndex,
+    imagePreviewUrls,
   } = commonState;
 
   return (
@@ -135,6 +138,14 @@ const AppWrapper = (props: Props) => {
         actions={actionSheetActions}
         onClose={() => {
           dispatch(closeActionSheet());
+        }}
+      />
+      <ImagePreview
+        visible={imagePreviewVisible}
+        imageUrls={imagePreviewUrls}
+        index={imagePreviewIndex}
+        onClose={() => {
+          dispatch(closeImagePreview());
         }}
       />
       <NewVersionModal

@@ -13,3 +13,16 @@ export const openActionSheet = (
 export const closeActionSheet = () => ({
   type: ActionTypes.CLOSE_ACTION_SHEET,
 });
+
+export const openImagePreview = (
+  index: number,
+  urls: Array<{url: string}>,
+) => ({
+  type: ActionTypes.OPEN_IMAGE_PREVIEW,
+  index,
+  urls,
+});
+
+export const closeImagePreview = () => ({
+  type: ActionTypes.CLOSE_IMAGE_PREVIEW,
+});

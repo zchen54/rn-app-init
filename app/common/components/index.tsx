@@ -2,8 +2,8 @@ import React, {Component, Fragment} from 'react';
 import {Text} from 'react-native';
 
 export * from './Button';
-export * from './DImagePicker';
-export * from './DImagePreview';
+export * from './SingleImagePicker';
+export * from './ImagePreview';
 export * from './DInputWithAnimated';
 export * from './DMoviePlayer';
 export * from './DTabs';

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import ImagePicker from 'react-native-image-crop-picker';
 import {
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import {Modal, Toast} from '@ant-design/react-native';
-import {DImagePreview} from './DImagePreview';
+import {ImagePreview} from './ImagePreview';
 import {
   setSizeWithPx,
   uploadImage,
@@ -26,28 +26,21 @@ import ImageResizer from 'react-native-image-resizer';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {DColors, DFontSize, FONT_FAMILY} from '../styles';
 import {ActionSheet} from './ActionSheet';
+import {store} from '../../store';
+import {openActionSheet, openImagePreview} from '../../store/actions';
 import {PlatFormAndroid} from '../../env';
 
 const addImg = require('../../assets/images/template/Add-picture.png');
 const deleteImg = require('../../assets/images/template/delete-gray.png');
 const rightIcon = require('../../assets/images/template/right_choose.png');
 
-interface SelectedImages {
+interface SelectedImage {
   path: string;
   size: number;
   uploading: boolean;
 }
+const initSelectedImages: SelectedImage[] = [];
 
-interface State {
-  actionSheetVisible: boolean; // 选择拍照或相册
-  previewVisible: boolean; // 预览已选图片
-  previewIndex: number; // 预览序号
-  uploadOrLocal: boolean; // 是否联网上传
-  previewAfterSelect: boolean; // 选择后预览
-  selectedImages: Array<SelectedImages>; // 待处理的图片
-  selectFullImage: boolean;
-  isBusy: boolean; // 正在处理图片
-}
 interface Props {
   source: any;
   pickerStyle: any;
@@ -55,71 +48,62 @@ interface Props {
   multiple?: boolean;
   maxFiles?: number;
   authToken: string;
-  isCollectData?: boolean;
 }
 
-export class MultipleImagePicker extends Component<Props, State> {
-  sourceArr: any = [];
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      actionSheetVisible: false,
-      previewVisible: false,
-      previewIndex: 0,
-      uploadOrLocal: false,
-      previewAfterSelect: false,
-      selectedImages: [],
-      selectFullImage: false,
-      isBusy: false,
-    };
-  }
+export const MultipleImagePicker = (props: Props) => {
+  const {
+    source,
+    pickerStyle,
+    handleSelect,
+    multiple,
+    maxFiles,
+    authToken,
+  } = props;
+
+  const [selectedImages, setSelectedImages] = useState(initSelectedImages);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [selectFullImage, setSelectFullImage] = useState(false);
+  let sourceArr: any = [];
 
   //选择图片
-  selectPhoto = (type: 'Camera' | 'Gallery') => {
-    const {isCollectData} = this.props;
+  function selectPhoto(type: 'Camera' | 'Gallery') {
     isNetworkConnected()
       .then(isConnected => {
-        if (isConnected || isCollectData) {
-          this.setState({
-            uploadOrLocal: isConnected ? true : false,
-            actionSheetVisible: false,
-          });
+        if (isConnected) {
           if (type === 'Camera') {
-            this.selectFromCamera();
+            selectFromCamera();
           } else if (type === 'Gallery') {
-            this.selectFromGallery();
+            selectFromGallery();
           }
         }
       })
       .catch(error => {
         console.log(error);
       });
-  };
+  }
 
-  selectFromCamera = () => {
+  function selectFromCamera() {
     ImagePicker.openCamera({
       mediaType: 'photo',
     }).then(image => {
-      this.selectFulfilled(image);
+      selectFulfilled(image);
     });
-  };
+  }
 
-  selectFromGallery = () => {
-    const {multiple, maxFiles} = this.props;
+  function selectFromGallery() {
     ImagePicker.openPicker({
       mediaType: 'photo',
       multiple: multiple ? true : false,
       maxFiles: maxFiles || 1,
     }).then(images => {
-      this.selectFulfilled(images);
+      selectFulfilled(images);
     });
-  };
+  }
 
-  selectFulfilled = (images: any) => {
+  function selectFulfilled(images: any) {
     console.log('selectFulfilled', images);
-    const {maxFiles} = this.props;
     const formatImageObj = (image: any) => {
-      let imageObj: SelectedImages = {
+      let imageObj: SelectedImage = {
         path: image.path,
         size: image.size,
         uploading: false,
@@ -127,9 +111,9 @@ export class MultipleImagePicker extends Component<Props, State> {
       return imageObj;
     };
 
-    let selectedImages: Array<SelectedImages> = [];
+    let newSelectedImages: Array<SelectedImage> = [];
     if (Array.isArray(images)) {
-      if (maxFiles && images.length + this.sourceArr.length > maxFiles) {
+      if (maxFiles && images.length + sourceArr.length > maxFiles) {
         Modal.alert(
           'Select picture failed',
           `A maximum of ${maxFiles} pictures can be uploaded`,
@@ -142,17 +126,17 @@ export class MultipleImagePicker extends Component<Props, State> {
         );
         return;
       }
-      selectedImages = images.map((item: any) => formatImageObj(item));
+      newSelectedImages = images.map((item: any) => formatImageObj(item));
     } else {
-      selectedImages.push(formatImageObj(images));
+      newSelectedImages.push(formatImageObj(images));
     }
-    this.setState({selectedImages, previewAfterSelect: true});
-  };
+    setSelectedImages(newSelectedImages);
+    setConfirmVisible(true);
+  }
 
-  handleFullImage = () => {
-    const {selectedImages, selectFullImage} = this.state;
+  function handleFullImage() {
     const invalidSize = selectedImages.some(
-      (image: SelectedImages) =>
+      (image: SelectedImage) =>
         !selectFullImage && image.size / 1024 / 1024 > 10,
     );
     if (invalidSize) {
@@ -163,21 +147,16 @@ export class MultipleImagePicker extends Component<Props, State> {
         false,
       );
     } else {
-      this.setState(prevState => ({
-        ...prevState,
-        selectFullImage: !prevState.selectFullImage,
-      }));
+      setSelectFullImage(!selectFullImage);
     }
-  };
+  }
 
-  handleConfirm = () => {
-    const {selectFullImage, selectedImages} = this.state;
-
+  function handleConfirm() {
     if (selectFullImage) {
-      let uris = selectedImages.map((image: SelectedImages) => image.path);
-      this.uploadImages(uris);
+      let uris = selectedImages.map((image: SelectedImage) => image.path);
+      uploadImages(uris);
     } else {
-      let promises = selectedImages.map((image: SelectedImages) => {
+      let promises = selectedImages.map((image: SelectedImage) => {
         return ImageResizer.createResizedImage(
           image.path,
           3000,
@@ -191,207 +170,167 @@ export class MultipleImagePicker extends Component<Props, State> {
           console.log('ImageResizer---res---', responseArr);
           if (Array.isArray(responseArr)) {
             let uris = responseArr.map((image: any) => image.uri);
-            this.uploadImages(uris);
+            uploadImages(uris);
           }
         })
         .catch(error => {
           console.log(error);
         });
     }
-  };
+  }
 
-  uploadImages = (uris: string[]) => {
-    const {authToken} = this.props;
-    const {uploadOrLocal} = this.state;
-    if (uploadOrLocal) {
-      uploadImage(API_v2.uploadFile, uris, authToken).then((res: any) => {
-        console.log('Server res ---> ', res);
-        if (res.result === 'Success' && Array.isArray(res.data)) {
-          this.sourceArr.push(...res.data);
-          this.props.handleSelect(this.sourceArr.join(','));
-        }
-        this.handleCancelSelect();
-      });
-    } else {
-      this.sourceArr.push(uris);
-      this.props.handleSelect(this.sourceArr.join(','));
-      this.handleCancelSelect();
-    }
-  };
-
-  handleCancelSelect = () => {
-    this.setState({
-      selectedImages: [],
-      previewAfterSelect: false,
+  function uploadImages(uris: string[]) {
+    uploadImage(API_v2.uploadFile, uris, authToken).then((res: any) => {
+      console.log('Server res ---> ', res);
+      if (res.result === 'Success' && Array.isArray(res.data)) {
+        sourceArr.push(...res.data);
+        handleSelect(sourceArr.join(','));
+      }
+      handleCancelSelect();
     });
-  };
+  }
 
-  handleDeleteImage = (index: number) => {
-    this.sourceArr.splice(index, 1);
-    this.props.handleSelect(this.sourceArr.join(','), null);
-  };
+  function handleCancelSelect() {
+    setSelectedImages(initSelectedImages);
+    setConfirmVisible(false);
+  }
 
-  handlePreviewVisible = (visible: boolean, index: number) => {
-    this.setState({previewVisible: visible, previewIndex: index || 0});
-  };
+  function handleDeleteImage(index: number) {
+    sourceArr.splice(index, 1);
+    handleSelect(sourceArr.join(','), null);
+  }
 
-  render() {
-    const {
-      previewVisible,
-      previewIndex,
-      previewAfterSelect,
-      selectFullImage,
-      actionSheetVisible,
-      isBusy,
-      selectedImages,
-    } = this.state;
-    const {source, pickerStyle, maxFiles} = this.props;
+  function handlePreviewImage(index: number) {
+    const imageUrls = sourceArr.map((item: string) => ({url: item}));
+    store.dispatch(openImagePreview(index, imageUrls));
+  }
 
-    this.sourceArr = !source ? [] : source.split(',');
-    const imageUrls = this.sourceArr.map((item: string) => ({url: item}));
-    let containerStyle: any = [styles.avatarContainer, styles.avatar];
-    if (pickerStyle) {
-      containerStyle.push(pickerStyle);
-    }
-
-    const formatSize = (size: number) => {
-      return Math.ceil(size / 1024) > 1024
-        ? Math.ceil((size / 1024 / 1024) * 100) / 100 + 'M'
-        : Math.ceil(size / 1024) + 'K';
-    };
-
-    // 上传前预处理
-    let selectedFullSize = 0;
-    const selectedFulfilledUrls = selectedImages.map(
-      (image: SelectedImages) => {
-        selectedFullSize += image.size;
-        return {url: image.path};
-      },
-    );
-
+  function handleOpenActionSheet() {
     // 选择来源
-    const controllers = [
+    const actions = [
       {
         text: 'Take Photo',
         onPress: () => {
-          this.selectPhoto('Camera');
+          selectPhoto('Camera');
         },
       },
       {
         text: 'Choose from Gallery',
         onPress: () => {
-          this.selectPhoto('Gallery');
+          selectPhoto('Gallery');
         },
       },
     ];
-
-    return (
-      <View style={styles.imagePickerList}>
-        {this.sourceArr.map((item: any, index: number) => (
-          <TouchableOpacity
-            key={index}
-            onPress={() => {
-              this.handlePreviewVisible(true, index);
-            }}
-            style={containerStyle}>
-            {!item ? (
-              <Image style={styles.addIcon} source={addImg} />
-            ) : (
-              <Image style={styles.avatar} source={{uri: item}} />
-            )}
-            <TouchableOpacity
-              key="deleteImage"
-              onPress={() => {
-                this.handleDeleteImage(index);
-              }}
-              style={styles.deleteBtn}>
-              <Image style={styles.deleteIcon} source={deleteImg} />
-            </TouchableOpacity>
-          </TouchableOpacity>
-        ))}
-        {!maxFiles || this.sourceArr.length < maxFiles ? (
-          <TouchableOpacity
-            key="newPicker"
-            disabled={isBusy}
-            onPress={() => {
-              this.setState({actionSheetVisible: true});
-            }}
-            style={containerStyle}>
-            <Image style={styles.addIcon} source={addImg} />
-          </TouchableOpacity>
-        ) : null}
-        <DImagePreview
-          visible={previewVisible}
-          imageUrls={imageUrls}
-          index={previewIndex}
-          handleClose={() => {
-            this.handlePreviewVisible(false, 0);
-          }}
-        />
-        <Modal
-          popup
-          visible={previewAfterSelect}
-          transparent={false}
-          animationType="slide-up"
-          onClose={this.handleCancelSelect}>
-          <View
-            style={{
-              width: deviceWidth,
-              height: deviceHeight,
-            }}>
-            <View style={styles.previewView}>
-              {selectedFulfilledUrls.length ? (
-                <ImageViewer
-                  imageUrls={selectedFulfilledUrls}
-                  saveToLocalByLongPress={false}
-                />
-              ) : null}
-            </View>
-            <View style={styles.controller}>
-              <TouchableOpacity
-                key="cancel"
-                onPress={this.handleCancelSelect}
-                style={styles.cancelBtn}>
-                <Text style={{fontSize: 14, color: '#fff'}}>Cancel</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                key="fullImage"
-                onPress={this.handleFullImage}
-                style={styles.fullImageBtn}>
-                {selectFullImage ? (
-                  <Image
-                    style={{...styles.fullImageBtnCircle, borderWidth: 0}}
-                    source={rightIcon}
-                  />
-                ) : (
-                  <View style={styles.fullImageBtnCircle} />
-                )}
-                <Text style={{fontSize: 14, color: '#fff'}}>
-                  {selectFullImage
-                    ? 'Full image (' + formatSize(selectedFullSize) + ')'
-                    : 'Full image'}
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                key="confirm"
-                onPress={this.handleConfirm}
-                style={styles.confirmBtn}>
-                <Text style={{fontSize: 14, color: '#fff'}}>Confirm</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-        <ActionSheet
-          visible={actionSheetVisible}
-          onClose={() => {
-            this.setState({actionSheetVisible: false});
-          }}
-          actions={controllers}
-        />
-      </View>
-    );
+    store.dispatch(openActionSheet(actions));
   }
-}
+
+  sourceArr = !source ? [] : source.split(',');
+  let containerStyle: any = [styles.avatarContainer, styles.avatar];
+  if (pickerStyle) {
+    containerStyle.push(pickerStyle);
+  }
+
+  const formatSize = (size: number) => {
+    return Math.ceil(size / 1024) > 1024
+      ? Math.ceil((size / 1024 / 1024) * 100) / 100 + 'M'
+      : Math.ceil(size / 1024) + 'K';
+  };
+
+  // 上传前预处理
+  let selectedFullSize = 0;
+  const selectedFulfilledUrls = selectedImages.map((image: SelectedImage) => {
+    selectedFullSize += image.size;
+    return {url: image.path};
+  });
+
+  return (
+    <View style={styles.imagePickerList}>
+      {sourceArr.map((item: any, index: number) => (
+        <TouchableOpacity
+          key={index}
+          onPress={() => {
+            handlePreviewImage(index);
+          }}
+          style={containerStyle}>
+          {!item ? (
+            <Image style={styles.addIcon} source={addImg} />
+          ) : (
+            <Image style={styles.avatar} source={{uri: item}} />
+          )}
+          <TouchableOpacity
+            key="deleteImage"
+            onPress={() => {
+              handleDeleteImage(index);
+            }}
+            style={styles.deleteBtn}>
+            <Image style={styles.deleteIcon} source={deleteImg} />
+          </TouchableOpacity>
+        </TouchableOpacity>
+      ))}
+      {!maxFiles || sourceArr.length < maxFiles ? (
+        <TouchableOpacity
+          key="newPicker"
+          onPress={handleOpenActionSheet}
+          style={containerStyle}>
+          <Image style={styles.addIcon} source={addImg} />
+        </TouchableOpacity>
+      ) : null}
+      <Modal
+        popup
+        visible={confirmVisible}
+        transparent={false}
+        animationType="slide-up"
+        onClose={handleCancelSelect}>
+        <View
+          style={{
+            width: deviceWidth,
+            height: deviceHeight,
+          }}>
+          <View style={styles.previewView}>
+            {selectedFulfilledUrls.length ? (
+              <ImageViewer
+                imageUrls={selectedFulfilledUrls}
+                saveToLocalByLongPress={false}
+              />
+            ) : null}
+          </View>
+          <View style={styles.controller}>
+            <TouchableOpacity
+              key="cancel"
+              onPress={handleCancelSelect}
+              style={styles.cancelBtn}>
+              <Text style={{fontSize: 14, color: '#fff'}}>Cancel</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              key="fullImage"
+              onPress={handleFullImage}
+              style={styles.fullImageBtn}>
+              {selectFullImage ? (
+                <Image
+                  style={{...styles.fullImageBtnCircle, borderWidth: 0}}
+                  source={rightIcon}
+                />
+              ) : (
+                <View style={styles.fullImageBtnCircle} />
+              )}
+              <Text style={{fontSize: 14, color: '#fff'}}>
+                {selectFullImage
+                  ? 'Full image (' + formatSize(selectedFullSize) + ')'
+                  : 'Full image'}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              key="confirm"
+              onPress={handleConfirm}
+              style={styles.confirmBtn}>
+              <Text style={{fontSize: 14, color: '#fff'}}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   imagePickerList: {
