@@ -1,5 +1,10 @@
 'use strict';
 export enum ActionTypes {
+  // common
+  OPEN_ACTION_SHEET = 'OPEN_ACTION_SHEET',
+  CLOSE_ACTION_SHEET = 'CLOSE_ACTION_SHEET',
+  CLEAR_COMMON_REDUCER = 'CLEAR_COMMON_REDUCER',
+  // personal
   LOGIN = 'LOGIN',
   LOGIN_SUCCESS = 'LOGIN_SUCCESS',
   LOGOUT = 'LOGOUT',

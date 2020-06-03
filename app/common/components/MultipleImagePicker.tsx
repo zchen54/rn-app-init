@@ -25,7 +25,7 @@ import {ErrorMessage_Network_Offline} from '../../env';
 import ImageResizer from 'react-native-image-resizer';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {DColors, DFontSize, FONT_FAMILY} from '../styles';
-import {DActionSheet} from './DActionSheet';
+import {ActionSheet} from './ActionSheet';
 import {PlatFormAndroid} from '../../env';
 
 const addImg = require('../../assets/images/template/Add-picture.png');
@@ -381,7 +381,7 @@ export class MultipleImagePicker extends Component<Props, State> {
             </View>
           </View>
         </Modal>
-        <DActionSheet
+        <ActionSheet
           visible={actionSheetVisible}
           onClose={() => {
             this.setState({actionSheetVisible: false});

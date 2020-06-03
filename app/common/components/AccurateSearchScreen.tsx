@@ -19,7 +19,6 @@ import {
   clearSearchEmailHistory,
   deviceWidth,
 } from '../utils';
-import {searchUserByEmail} from '../../store/actions';
 import {FONT_FAMILY} from '../styles';
 
 interface State {
@@ -44,7 +43,7 @@ const Icon = {
   HistoryIcon: require('../../assets/images/Me/history.png'),
 };
 
-export class AccurateSearch extends Component<Props, State> {
+class AccurateSearchScreen extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -156,11 +155,6 @@ export class AccurateSearch extends Component<Props, State> {
       history: [searchValue, ...newHistory].splice(0, 10),
     });
     setSearchEmailHistory([searchValue, ...newHistory].splice(0, 10));
-    this.props.searchUserByEmail(authToken, searchValue, () => {
-      navigation.navigate('FriendInfo', {
-        type: navigation.getParam('type'),
-      });
-    });
   };
 
   _renderItem = (data: any) => {
@@ -372,17 +366,4 @@ const mapStateToProps = (state: any) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => {
-  return {
-    searchUserByEmail: (
-      authToken: string,
-      email: string,
-      callback?: Function,
-    ) => dispatch(searchUserByEmail(authToken, email, callback)),
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AccurateSearch);
+export default connect(mapStateToProps)(AccurateSearchScreen);

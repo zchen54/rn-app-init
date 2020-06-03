@@ -34,7 +34,6 @@ import {
   PlatFormAndroid,
   GOOGLE_MAPS_API_KEY,
 } from '../../env';
-import moment from 'moment';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 interface Props {

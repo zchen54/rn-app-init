@@ -1,5 +1,4 @@
 'use strict';
-import moment from 'moment';
 import {ActionTypes} from '../types';
 
 interface InitialState {

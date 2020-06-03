@@ -24,6 +24,9 @@ import DetailsScreen from '../screens/eg/DetailsScreen';
 import SettingsScreen from '../screens/eg/SettingsScreen';
 import CustomAndroidBackButtonBehaviorScreen from '../screens/eg/CustomAndroidBackButtonBehaviorScreen';
 
+// collect data
+import CollectDataScreen from '../screens/collectData/CollectDataScreen';
+
 const Stack = createStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
@@ -56,7 +59,7 @@ const BottomTabScreen = () => (
     />
     <Stack.Screen
       name="SettingsScreen"
-      component={SettingsScreen}
+      component={CollectDataScreen}
       options={{tabBarLabel: 'App'} as any}
     />
   </BottomTab.Navigator>

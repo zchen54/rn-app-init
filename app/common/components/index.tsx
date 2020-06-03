@@ -18,7 +18,6 @@ export * from './SearchInput';
 export * from './NewVersionModal';
 export * from './NetworkStateBar';
 export * from './TitleBarWithTabs';
-export * from './DActionSheet';
 export * from './MultipleImagePicker';
 export * from './MultipleVideoPicker';
 export * from './PlaceAutoComplete';
