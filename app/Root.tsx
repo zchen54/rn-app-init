@@ -11,7 +11,8 @@ import {PlatFormAndroid, setReleaseMode, serverURL} from './env';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/lib/integration/react';
 import {store, persistor} from './store';
-import AppContainer from './containers/App';
+// import AppContainer from './containers/App';
+import AppContainer from './routes/AppContainer';
 import {
   NavigationService,
   isIphoneX,
@@ -62,11 +63,11 @@ export class Root extends Component<Props, State> {
       setReleaseMode(isRelease);
     } else {
     }
-    this.getVerSion();
+    // this.getVersion();
   }
 
   // 获取版本号
-  getVerSion = () => {
+  getVersion = () => {
     if (Platform.OS === PlatFormAndroid) {
       const {versionName, versionCode} = this.props.initialProperties;
       this.handleCheckNewVersion(versionName, versionCode);
@@ -133,24 +134,25 @@ export class Root extends Component<Props, State> {
     const {updateModalVisible, newVersion} = this.state;
     const iphoneSafeAreaStyle = {
       flex: 1,
-      backgroundColor: '#f2f2f2',
-      paddingBottom: isIphoneX() || isIphoneXsMax() ? 30 : 0,
+      // backgroundColor: '#f2f2f2',
+      // paddingBottom: isIphoneX() || isIphoneXsMax() ? 30 : 0,
     };
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <View style={iphoneSafeAreaStyle}>
+          <SafeAreaView style={iphoneSafeAreaStyle}>
             <AppContainer
-              screenProps={this.props}
-              ref={navigatorRef => {
-                NavigationService.setTopLevelNavigator(navigatorRef);
-              }}
+            // screenProps={this.props}
+            // ref={navigatorRef => {
+            //   NavigationService.setTopLevelNavigator(navigatorRef);
+            // }}
             />
             <NewVersionModal
               visible={updateModalVisible}
               newVersion={newVersion}
-              handleCloseModal={this.closeControllerModal}></NewVersionModal>
-          </View>
+              handleCloseModal={this.closeControllerModal}
+            />
+          </SafeAreaView>
         </PersistGate>
       </Provider>
     );

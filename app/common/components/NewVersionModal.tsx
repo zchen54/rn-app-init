@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   Image,
   View,
@@ -7,14 +7,14 @@ import {
   StyleSheet,
   Platform,
   Linking,
-  Modal
-} from "react-native";
-import { Toast, Portal } from "@ant-design/react-native";
-import { requestApiV2, API_v2, deviceWidth, deviceHeight } from "../utils";
-import { DColors } from "../styles";
-import { PlatFormAndroid } from "../../env";
+  Modal,
+} from 'react-native';
+import {Toast, Portal} from '@ant-design/react-native';
+import {requestApiV2, API_v2, deviceWidth, deviceHeight} from '../utils';
+import {DColors} from '../styles';
+import {PlatFormAndroid} from '../../env';
 
-const updateBackground = require("../../containers/images/GuidePage/rocket.png");
+const updateBackground = require('../../assets/images/GuidePage/rocket.png');
 
 interface State {}
 interface Props {
@@ -33,8 +33,8 @@ export class NewVersionModal extends Component<Props, State> {
 
   handleUpdateApp = () => {
     const googlePlayUrl =
-        "http://play.google.com/store/apps/details?id=com.data2go",
-      appStoreUrl = "itms-apps://itunes.apple.com/cn/app/1474206224?mt=8";
+        'http://play.google.com/store/apps/details?id=com.data2go',
+      appStoreUrl = 'itms-apps://itunes.apple.com/cn/app/1474206224?mt=8';
 
     if (Platform.OS === PlatFormAndroid) {
       Linking.canOpenURL(googlePlayUrl)
@@ -45,7 +45,7 @@ export class NewVersionModal extends Component<Props, State> {
             return Linking.openURL(googlePlayUrl);
           }
         })
-        .catch(err => console.error("An error occurred", err));
+        .catch(err => console.error('An error occurred', err));
     } else {
       Linking.canOpenURL(appStoreUrl)
         .then(supported => {
@@ -55,25 +55,25 @@ export class NewVersionModal extends Component<Props, State> {
             return Linking.openURL(appStoreUrl);
           }
         })
-        .catch(err => console.error("An error occurred", err));
+        .catch(err => console.error('An error occurred', err));
     }
   };
 
   render() {
-    const { visible, newVersion } = this.props;
-    console.log("render v", visible);
+    const {visible, newVersion} = this.props;
+    console.log('render v', visible);
 
     let contentArray = newVersion.content
-      ? newVersion.content.split(" /n ")
-      : [""];
+      ? newVersion.content.split(' /n ')
+      : [''];
     return (
       <Modal visible={visible} transparent={true} animationType="fade">
         <View style={styles.modalWrap}>
           <View style={styles.infoWrap}>
             <Image
               source={updateBackground}
-              style={{ width: 280, height: 132 }}
-            ></Image>
+              style={{width: 280, height: 132}}
+            />
             <View style={styles.header}>
               <Text style={styles.title}>New version</Text>
               <Text style={styles.version}>{newVersion.versionName}</Text>
@@ -88,23 +88,20 @@ export class NewVersionModal extends Component<Props, State> {
                 style={
                   !newVersion.forceUpdate
                     ? styles.buttonGroup
-                    : { ...styles.buttonGroup, justifyContent: "center" }
-                }
-              >
+                    : {...styles.buttonGroup, justifyContent: 'center'}
+                }>
                 {!newVersion.forceUpdate && (
                   <TouchableOpacity
                     style={styles.cancelButton}
                     onPress={() => {
                       this.props.handleCloseModal();
-                    }}
-                  >
+                    }}>
                     <Text style={styles.cancelButtonText}>Ignore</Text>
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity
                   style={styles.confirmButton}
-                  onPress={this.handleUpdateApp}
-                >
+                  onPress={this.handleUpdateApp}>
                   <Text style={styles.confirmButtonText}>Update</Text>
                 </TouchableOpacity>
               </View>
@@ -120,71 +117,71 @@ const styles = StyleSheet.create({
   modalWrap: {
     height: deviceHeight,
     width: deviceWidth,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)"
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.3)',
   },
   infoWrap: {
     width: 280,
     borderRadius: 5,
-    overflow: "hidden"
+    overflow: 'hidden',
   },
   header: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     width: 280,
     height: 132,
     paddingHorizontal: 20,
-    paddingTop: 30
+    paddingTop: 30,
   },
   title: {
     fontSize: 20,
-    color: "#fff"
+    color: '#fff',
   },
   version: {
     marginTop: 5,
     fontSize: 18,
-    color: "#fff"
+    color: '#fff',
   },
   content: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     paddingHorizontal: 20,
-    paddingVertical: 20
+    paddingVertical: 20,
   },
   contentLine: {
     marginBottom: 10,
     fontSize: 16,
-    color: "#434343"
+    color: '#434343',
   },
   buttonGroup: {
     marginTop: 20,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   cancelButton: {
     width: 112,
     height: 36,
     borderRadius: 5,
-    borderColor: "#757575",
+    borderColor: '#757575',
     borderWidth: 1,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 16,
-    borderColor: "#757575"
+    borderColor: '#757575',
   },
   confirmButton: {
     width: 112,
     height: 36,
     borderRadius: 5,
     backgroundColor: DColors.mainColor,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   confirmButtonText: {
     fontSize: 16,
-    color: "#fff"
-  }
+    color: '#fff',
+  },
 });

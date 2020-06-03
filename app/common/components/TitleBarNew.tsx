@@ -18,7 +18,7 @@ import {
 } from '../../common/utils';
 import {NetworkStateBar} from './NetworkStateBar';
 
-const backIcon = require('../../containers/images/template/Back.png');
+const backIcon = require('../../assets/images/template/Back.png');
 
 interface State {}
 interface Props {
@@ -108,7 +108,7 @@ export class TitleBarNew extends Component<Props, State> {
           {this.renderRight()}
         </View>
 
-        <NetworkStateBar></NetworkStateBar>
+        <NetworkStateBar />
       </View>
     );
   }

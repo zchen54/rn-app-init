@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {
   StyleSheet,
   View,
@@ -8,8 +8,8 @@ import {
   TouchableOpacity,
   StatusBar,
   TextInput,
-  FlatList
-} from "react-native";
+  FlatList,
+} from 'react-native';
 import {
   statusBarHeight,
   deviceHeight,
@@ -17,10 +17,10 @@ import {
   getSearchEmailHistory,
   setSearchEmailHistory,
   clearSearchEmailHistory,
-  deviceWidth
-} from "../utils";
-import { searchUserByEmail } from "../../store/actions";
-import { FONT_FAMILY } from "../styles";
+  deviceWidth,
+} from '../utils';
+import {searchUserByEmail} from '../../store/actions';
+import {FONT_FAMILY} from '../styles';
 
 interface State {
   searchValue: string;
@@ -35,21 +35,21 @@ interface Props {
 }
 
 const Page = {
-  font_family: FONT_FAMILY
+  font_family: FONT_FAMILY,
 };
 
 const Icon = {
-  SearchIcon: require("../../containers/images/Me/search.png"),
-  CloseIcon: require("../../containers/images/Me/close.png"),
-  HistoryIcon: require("../../containers/images/Me/history.png")
+  SearchIcon: require('../../assets/images/Me/search.png'),
+  CloseIcon: require('../../assets/images/Me/close.png'),
+  HistoryIcon: require('../../assets/images/Me/history.png'),
 };
 
 export class AccurateSearch extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      searchValue: "",
-      history: []
+      searchValue: '',
+      history: [],
     };
   }
 
@@ -58,8 +58,8 @@ export class AccurateSearch extends Component<Props, State> {
   }
 
   componentWillUnmount() {
-    let { history } = this.state;
-    let type = this.props.navigation.getParam("type");
+    let {history} = this.state;
+    let type = this.props.navigation.getParam('type');
     if (
       type === searchType.FriendEmail ||
       type === searchType.InviteEmployeesByEmail
@@ -70,7 +70,7 @@ export class AccurateSearch extends Component<Props, State> {
 
   initState = (props: Props) => {
     let history = [];
-    let type = this.props.navigation.getParam("type");
+    let type = this.props.navigation.getParam('type');
     if (
       type === searchType.FriendEmail ||
       type === searchType.InviteEmployeesByEmail
@@ -78,10 +78,10 @@ export class AccurateSearch extends Component<Props, State> {
       getSearchEmailHistory()
         .then(res => {
           if (res) {
-            console.log("res", res);
+            console.log('res', res);
             history = res;
             this.setState({
-              history
+              history,
             });
           }
         })
@@ -97,19 +97,19 @@ export class AccurateSearch extends Component<Props, State> {
 
   handleChange = (text: string) => {
     this.setState({
-      searchValue: text
+      searchValue: text,
     });
   };
 
   handleEnter = () => {
-    let { history, searchValue } = this.state;
-    let type = this.props.navigation.getParam("type");
-    if (searchValue === "") {
+    let {history, searchValue} = this.state;
+    let type = this.props.navigation.getParam('type');
+    if (searchValue === '') {
       return;
     }
     let newHistory = history.filter(item => item !== searchValue);
     this.setState({
-      history: [searchValue, ...newHistory].splice(0, 10)
+      history: [searchValue, ...newHistory].splice(0, 10),
     });
     if (
       type === searchType.FriendEmail ||
@@ -120,11 +120,11 @@ export class AccurateSearch extends Component<Props, State> {
   };
 
   handleDeleteHistory = (text: string) => {
-    let { history } = this.state;
-    let type = this.props.navigation.getParam("type");
+    let {history} = this.state;
+    let type = this.props.navigation.getParam('type');
     let newHistory = history.filter(item => item !== text);
     this.setState({
-      history: newHistory.splice(0, 10)
+      history: newHistory.splice(0, 10),
     });
     if (
       type === searchType.FriendEmail ||
@@ -135,9 +135,9 @@ export class AccurateSearch extends Component<Props, State> {
   };
 
   handleClearHistory = () => {
-    let type = this.props.navigation.getParam("type");
+    let type = this.props.navigation.getParam('type');
     this.setState({
-      history: []
+      history: [],
     });
     if (
       type === searchType.FriendEmail ||
@@ -148,31 +148,30 @@ export class AccurateSearch extends Component<Props, State> {
   };
 
   handleSearch = () => {
-    let { currentUserInfo, navigation } = this.props;
-    let { authToken } = currentUserInfo;
-    let { searchValue, history } = this.state;
+    let {currentUserInfo, navigation} = this.props;
+    let {authToken} = currentUserInfo;
+    let {searchValue, history} = this.state;
     let newHistory = history.filter(item => item !== searchValue);
     this.setState({
-      history: [searchValue, ...newHistory].splice(0, 10)
+      history: [searchValue, ...newHistory].splice(0, 10),
     });
     setSearchEmailHistory([searchValue, ...newHistory].splice(0, 10));
     this.props.searchUserByEmail(authToken, searchValue, () => {
-      navigation.navigate("FriendInfo", {
-        type: navigation.getParam("type")
+      navigation.navigate('FriendInfo', {
+        type: navigation.getParam('type'),
       });
     });
   };
 
   _renderItem = (data: any) => {
-    const { index, item } = data;
+    const {index, item} = data;
     return (
       <TouchableOpacity
         onPress={() =>
           this.setState({
-            searchValue: item
+            searchValue: item,
           })
-        }
-      >
+        }>
         <View style={styles.itemWrapper}>
           <Image style={styles.imageStyle} source={Icon.HistoryIcon} />
           <View style={index === 0 ? null : styles.line}>
@@ -180,8 +179,7 @@ export class AccurateSearch extends Component<Props, State> {
           </View>
           <TouchableOpacity
             style={styles.closeImageStyle}
-            onPress={() => this.handleDeleteHistory(item)}
-          >
+            onPress={() => this.handleDeleteHistory(item)}>
             <Image source={Icon.CloseIcon} />
           </TouchableOpacity>
         </View>
@@ -190,8 +188,8 @@ export class AccurateSearch extends Component<Props, State> {
   };
 
   render() {
-    const { searchValue, history } = this.state;
-    StatusBar.setBarStyle("dark-content", true);
+    const {searchValue, history} = this.state;
+    StatusBar.setBarStyle('dark-content', true);
     return (
       <View style={styles.normal}>
         <View style={styles.searchWrapper}>
@@ -205,7 +203,7 @@ export class AccurateSearch extends Component<Props, State> {
                 style={styles.inputStyle}
                 onChangeText={this.handleChange}
                 onBlur={this.handleEnter}
-                returnKeyType={"search"}
+                returnKeyType={'search'}
               />
             </View>
             <Text style={styles.cancelStyle} onPress={this.onCancel}>
@@ -219,7 +217,7 @@ export class AccurateSearch extends Component<Props, State> {
               <View style={styles.SearchIconWrapper}>
                 <Image
                   source={Icon.SearchIcon}
-                  style={{ ...styles.serachIconStyle, tintColor: "#FFFFFF" }}
+                  style={{...styles.serachIconStyle, tintColor: '#FFFFFF'}}
                 />
               </View>
               <Text style={styles.searchValueStyle}>Search: </Text>
@@ -227,26 +225,25 @@ export class AccurateSearch extends Component<Props, State> {
             </View>
           </TouchableOpacity>
         ) : (
-            <View style={{ maxHeight: deviceHeight - statusBarHeight - 53 }}>
-              <FlatList
-                data={history}
-                renderItem={data => this._renderItem(data)}
-                keyExtractor={(item, index) => item + index}
-              />
-              {history.length > 0 ? (
-                <TouchableOpacity
-                  style={{ marginTop: 8 }}
-                  onPress={this.handleClearHistory}
-                >
-                  <View style={styles.clearButton}>
-                    <Text style={styles.clearTextStyle}>
-                      Clear search records
+          <View style={{maxHeight: deviceHeight - statusBarHeight - 53}}>
+            <FlatList
+              data={history}
+              renderItem={data => this._renderItem(data)}
+              keyExtractor={(item, index) => item + index}
+            />
+            {history.length > 0 ? (
+              <TouchableOpacity
+                style={{marginTop: 8}}
+                onPress={this.handleClearHistory}>
+                <View style={styles.clearButton}>
+                  <Text style={styles.clearTextStyle}>
+                    Clear search records
                   </Text>
-                  </View>
-                </TouchableOpacity>
-              ) : null}
-            </View>
-          )}
+                </View>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+        )}
       </View>
     );
   }
@@ -255,101 +252,101 @@ export class AccurateSearch extends Component<Props, State> {
 const styles = StyleSheet.create({
   normal: {
     flex: 1,
-    backgroundColor: "#F2F2F2"
+    backgroundColor: '#F2F2F2',
   },
   searchWrapper: {
-    width: "100%",
+    width: '100%',
     height: 53 + statusBarHeight,
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingLeft: 17,
     paddingRight: 17,
     paddingTop: statusBarHeight,
-    backgroundColor: "#F2F2F2"
+    backgroundColor: '#F2F2F2',
   },
   container: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
     height: 53,
-    alignItems: "center"
+    alignItems: 'center',
   },
   inputWrapper: {
-    flexDirection: "row",
+    flexDirection: 'row',
     width: deviceWidth - 100,
     height: 33,
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
     paddingLeft: 10,
     paddingRight: 10,
-    borderRadius: 3
+    borderRadius: 3,
   },
   serachIconStyle: {
     width: 15,
-    height: 15
+    height: 15,
   },
   inputStyle: {
     fontFamily: Page.font_family,
     fontSize: 16,
     padding: 0,
     flex: 1,
-    paddingLeft: 6
+    paddingLeft: 6,
   },
   cancelStyle: {
     fontFamily: Page.font_family,
     fontSize: 16,
-    color: "#1E9DFC",
+    color: '#1E9DFC',
     width: 80,
-    paddingLeft: 17
+    paddingLeft: 17,
   },
   itemWrapper: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
     height: 48,
-    alignItems: "center",
-    backgroundColor: "#FFFFFF"
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
   },
   imageStyle: {
     width: 15,
     height: 15,
     marginLeft: 17,
-    marginRight: 17
+    marginRight: 17,
   },
   line: {
-    width: "100%",
+    width: '100%',
     borderTopWidth: 1,
-    borderTopColor: "#F2F2F2",
+    borderTopColor: '#F2F2F2',
     height: 48,
-    justifyContent: "center"
+    justifyContent: 'center',
   },
   searchValueStyle: {
     fontSize: 16,
-    color: "#2E2E2E"
+    color: '#2E2E2E',
   },
   closeImageStyle: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     height: 48,
     width: 48,
-    alignItems: "center",
-    justifyContent: "center"
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   clearButton: {
-    width: "100%",
+    width: '100%',
     height: 48,
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   clearTextStyle: {
     fontFamily: Page.font_family,
     fontSize: 14,
-    color: "#757575"
+    color: '#757575',
   },
   emailWrapper: {
-    flexDirection: "row",
-    width: "100%",
+    flexDirection: 'row',
+    width: '100%',
     height: 52,
-    alignItems: "center",
-    backgroundColor: "#FFFFFF"
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
   },
   SearchIconWrapper: {
     width: 27,
@@ -357,20 +354,20 @@ const styles = StyleSheet.create({
     borderRadius: 13.5,
     marginLeft: 17,
     marginRight: 14,
-    backgroundColor: "#1E9DFC",
-    alignItems: "center",
-    justifyContent: "center"
+    backgroundColor: '#1E9DFC',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   searchStyle: {
     fontFamily: Page.font_family,
     fontSize: 16,
-    color: "#1E9DFC"
-  }
+    color: '#1E9DFC',
+  },
 });
 
 const mapStateToProps = (state: any) => {
   return {
-    currentUserInfo: state.loginInfo.currentUserInfo
+    currentUserInfo: state.loginInfo.currentUserInfo,
     // friends: state.friendsList.friends
   };
 };
@@ -380,12 +377,12 @@ const mapDispatchToProps = (dispatch: any) => {
     searchUserByEmail: (
       authToken: string,
       email: string,
-      callback?: Function
-    ) => dispatch(searchUserByEmail(authToken, email, callback))
+      callback?: Function,
+    ) => dispatch(searchUserByEmail(authToken, email, callback)),
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(AccurateSearch);

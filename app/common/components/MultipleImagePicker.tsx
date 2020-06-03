@@ -28,9 +28,9 @@ import {DColors, DFontSize, FONT_FAMILY} from '../styles';
 import {DActionSheet} from './DActionSheet';
 import {PlatFormAndroid} from '../../env';
 
-const addImg = require('../../containers/images/template/Add-picture.png');
-const deleteImg = require('../../containers/images/template/delete-gray.png');
-const rightIcon = require('../../containers/images/template/right_choose.png');
+const addImg = require('../../assets/images/template/Add-picture.png');
+const deleteImg = require('../../assets/images/template/delete-gray.png');
+const rightIcon = require('../../assets/images/template/right_choose.png');
 
 interface SelectedImages {
   path: string;

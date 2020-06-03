@@ -12,8 +12,8 @@ import {
 } from '../../common/utils';
 import {ErrorMessage_Network_Offline} from '../../env';
 
-const addImg = require('../../containers/images/template/Add-picture.png');
-const deleteImg = require('../../containers/images/template/delete-gray.png');
+const addImg = require('../../assets/images/template/Add-picture.png');
+const deleteImg = require('../../assets/images/template/delete-gray.png');
 
 interface State {
   selectVideoSource: string;

@@ -1,25 +1,25 @@
-import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import SignatureCapture from "react-native-signature-capture";
+import React from 'react';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import SignatureCapture from 'react-native-signature-capture';
 import {
   Button,
   Modal,
   WhiteSpace,
   WingBlank,
   Toast,
-  Provider
-} from "@ant-design/react-native";
-import Orientation from "react-native-orientation";
-import { DColors, DFontSize, FONT_FAMILY } from "../styles";
+  Provider,
+} from '@ant-design/react-native';
+import Orientation from 'react-native-orientation';
+import {DColors, DFontSize, FONT_FAMILY} from '../styles';
 import {
   statusBarHeight,
   setSize, // 设置宽高
   deviceHeight, // 设备高度
   deviceWidth, // 设备宽度
-  setSizeWithPx // 设置字体 px 转 dp
-} from "../utils";
+  setSizeWithPx, // 设置字体 px 转 dp
+} from '../utils';
 
-const deleteImg = require("../../containers/images/template/delete-gray.png");
+const deleteImg = require('../../assets/images/template/delete-gray.png');
 
 interface State {
   signature: string;
@@ -32,7 +32,7 @@ export class SignatureDemo extends React.Component<Props, State> {
   SignatureDom: any;
   constructor(props: Props) {
     super(props);
-    this.state = { signature: "", modalVisible: false };
+    this.state = {signature: '', modalVisible: false};
   }
 
   componentWillMount() {
@@ -40,33 +40,33 @@ export class SignatureDemo extends React.Component<Props, State> {
   }
 
   handleOpen = () => {
-    this.setState({ modalVisible: true });
+    this.setState({modalVisible: true});
     Orientation.lockToLandscape();
   };
 
   handleClose = () => {
     this.setState({
-      modalVisible: false
+      modalVisible: false,
     });
     Orientation.lockToPortrait();
   };
 
   handleDelete = () => {
-    Modal.alert("Delete signature ?", "", [
+    Modal.alert('Delete signature ?', '', [
       {
-        text: "Cancel",
+        text: 'Cancel',
         onPress: () => {
-          console.log("cancel");
+          console.log('cancel');
         },
-        style: "cancel"
+        style: 'cancel',
       },
       {
-        text: "OK",
+        text: 'OK',
         onPress: () => {
-          this.setState({ signature: "" });
+          this.setState({signature: ''});
           // this.props.handleSelect("", null);
-        }
-      }
+        },
+      },
     ]);
   };
 
@@ -82,7 +82,7 @@ export class SignatureDemo extends React.Component<Props, State> {
     //result.encoded - for the base64 encoded png
     //result.pathName - for the file path name
     console.log(result);
-    this.setState({ signature: "file://" + result.pathName });
+    this.setState({signature: 'file://' + result.pathName});
     this.handleClose();
   };
   _onDragEvent = () => {
@@ -91,17 +91,16 @@ export class SignatureDemo extends React.Component<Props, State> {
   };
 
   render() {
-    const { modalVisible, signature } = this.state;
+    const {modalVisible, signature} = this.state;
     // const { source } = this.props;
     const source = signature;
-    console.log("render signature", source, deviceWidth, deviceHeight);
+    console.log('render signature', source, deviceWidth, deviceHeight);
     return (
       <View style={styles.container}>
-        {!signature || signature === "" ? (
+        {!signature || signature === '' ? (
           <TouchableOpacity
             style={styles.defaultView}
-            onPress={this.handleOpen}
-          >
+            onPress={this.handleOpen}>
             <Text>Click here to sign</Text>
           </TouchableOpacity>
         ) : (
@@ -109,7 +108,7 @@ export class SignatureDemo extends React.Component<Props, State> {
             <Image
               style={styles.signatureImage}
               source={{
-                uri: source
+                uri: source,
               }}
             />
             <TouchableOpacity
@@ -117,8 +116,7 @@ export class SignatureDemo extends React.Component<Props, State> {
               onPress={() => {
                 this.handleDelete();
               }}
-              style={styles.deleteBtn}
-            >
+              style={styles.deleteBtn}>
               <Image style={styles.deleteIcon} source={deleteImg} />
             </TouchableOpacity>
           </View>
@@ -127,17 +125,15 @@ export class SignatureDemo extends React.Component<Props, State> {
           transparent={false}
           visible={modalVisible}
           animationType="slide-up"
-          onClose={this.handleClose}
-        >
+          onClose={this.handleClose}>
           <View style={styles.signatureWrap}>
             <Text
               style={{
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 paddingHorizontal: 20,
-                paddingVertical: 10
-              }}
-            >
+                paddingVertical: 10,
+              }}>
               Please sign below
             </Text>
             <View style={styles.signature}>
@@ -145,7 +141,7 @@ export class SignatureDemo extends React.Component<Props, State> {
                 ref={(dom: any) => {
                   this.SignatureDom = dom;
                 }}
-                style={{ flex: 1 }}
+                style={{flex: 1}}
                 onSaveEvent={this._onSaveEvent}
                 onDragEvent={this._onDragEvent}
                 showBorder={true} // 是否显示虚线边框（边框仅在iOS上显示）
@@ -156,7 +152,7 @@ export class SignatureDemo extends React.Component<Props, State> {
                 // maxSize ：设置图像的最大尺寸保持纵横比，默认为500
               />
             </View>
-            <View style={{ flexDirection: "row" }}>
+            <View style={{flexDirection: 'row'}}>
               <Button style={styles.buttonStyle} onPress={this.saveSign}>
                 <Text>Save</Text>
               </Button>
@@ -176,58 +172,58 @@ export class SignatureDemo extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "red",
-    borderWidth: 1
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'red',
+    borderWidth: 1,
   },
   defaultView: {
     width: setSizeWithPx(980),
     height: setSizeWithPx(560),
-    backgroundColor: "#f2f2f2",
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "green",
-    borderWidth: 1
+    backgroundColor: '#f2f2f2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'green',
+    borderWidth: 1,
   },
   signatureView: {
     width: setSizeWithPx(980),
     height: setSizeWithPx(560),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    borderColor: "green",
-    borderWidth: 1
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderColor: 'green',
+    borderWidth: 1,
   },
   signatureImage: {
     width: setSizeWithPx(960),
-    height: setSizeWithPx(500)
+    height: setSizeWithPx(500),
   },
   signature: {
     flex: 1,
-    borderColor: "#333",
-    borderWidth: 1
+    borderColor: '#333',
+    borderWidth: 1,
   },
   signatureWrap: {
     width: deviceHeight,
     height: deviceWidth,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   buttonStyle: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     height: 50,
-    backgroundColor: "#f2f2f2",
-    margin: 10
+    backgroundColor: '#f2f2f2',
+    margin: 10,
   },
   deleteBtn: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
-    top: 0
+    top: 0,
   },
   deleteIcon: {
     width: setSizeWithPx(60),
-    height: setSizeWithPx(60)
-  }
+    height: setSizeWithPx(60),
+  },
 });

@@ -19,9 +19,9 @@ import ImageResizer from 'react-native-image-resizer';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import {DColors, DFontSize, FONT_FAMILY} from '../styles';
 
-const addImg = require('../../containers/images/template/Add-picture.png');
-const deleteImg = require('../../containers/images/template/delete-gray.png');
-const rightIcon = require('../../containers/images/template/right_choose.png');
+const addImg = require('../../assets/images/template/Add-picture.png');
+const deleteImg = require('../../assets/images/template/delete-gray.png');
+const rightIcon = require('../../assets/images/template/right_choose.png');
 
 interface State {
   previewVisible: boolean;

@@ -1,12 +1,12 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   StyleSheet,
   View,
   Text,
   Image,
   TouchableOpacity,
-  TextInput
-} from "react-native";
+  TextInput,
+} from 'react-native';
 interface State {}
 interface Props {
   value: string;
@@ -15,8 +15,8 @@ interface Props {
 }
 
 const Icon = {
-  SearchIcon: require("../../containers/images/Me/search.png"),
-  clearIcon: require("../../containers/images/template/Close.png")
+  SearchIcon: require('../../assets/images/Me/search.png'),
+  clearIcon: require('../../assets/images/template/Close.png'),
 };
 
 export class SearchInput extends Component<Props, State> {
@@ -26,28 +26,27 @@ export class SearchInput extends Component<Props, State> {
   }
 
   render() {
-    const { value, placeholder, onChange } = this.props;
+    const {value, placeholder, onChange} = this.props;
     return (
       <View style={styles.searchWrapper}>
         <View style={styles.searchIconWrap}>
-          <Image style={{ width: 16, height: 16 }} source={Icon.SearchIcon} />
+          <Image style={{width: 16, height: 16}} source={Icon.SearchIcon} />
         </View>
         <TextInput
           value={value}
-          placeholder={placeholder || "Search"}
+          placeholder={placeholder || 'Search'}
           onChangeText={value => {
             onChange(value);
           }}
-          style={{ flex: 1 }}
+          style={{flex: 1}}
         />
-        {value !== "" && (
+        {value !== '' && (
           <TouchableOpacity
             onPress={() => {
-              onChange("");
+              onChange('');
             }}
-            style={styles.clearIconWrap}
-          >
-            <Image style={{ width: 12, height: 12 }} source={Icon.clearIcon} />
+            style={styles.clearIconWrap}>
+            <Image style={{width: 12, height: 12}} source={Icon.clearIcon} />
           </TouchableOpacity>
         )}
       </View>
@@ -59,25 +58,25 @@ const styles = StyleSheet.create({
   searchWrapper: {
     height: 40,
     paddingRight: 40,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     borderRadius: 7,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
   },
   searchIconWrap: {
     width: 40,
     height: 40,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   clearIconWrap: {
     width: 40,
     height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
     top: 0,
-    right: 0
-  }
+    right: 0,
+  },
 });
