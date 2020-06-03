@@ -8,7 +8,14 @@ import {
   Platform,
 } from 'react-native';
 import Progress from './CodePushProgress.js';
-import {releaseMode, PlatFormAndroid} from './app/env';
+import {
+  releaseMode,
+  PlatFormAndroid,
+  ANDROID_CODE_PUSH_STAGING_KEY,
+  ANDROID_CODE_PUSH_PRODUCTION_KEY,
+  IOS_CODE_PUSH_STAGING_KEY,
+  IOS_CODE_PUSH_PRODUCTION_KEY,
+} from './app/env';
 import {deviceWidth, deviceHeight} from './app/common/utils';
 import {DColors} from './app/common/styles';
 import CodePush from 'react-native-code-push';
@@ -112,18 +119,18 @@ class CodePushUpdateModal extends Component {
     if (Platform.OS === PlatFormAndroid) {
       if (releaseMode) {
         // Android release
-        CODE_PUSH_KEY = '29ccTwr8evNW0KlA9VQWf-NWrNj09I7gslXb3';
+        CODE_PUSH_KEY = ANDROID_CODE_PUSH_PRODUCTION_KEY;
       } else {
         // Android beta
-        CODE_PUSH_KEY = 'Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv';
+        CODE_PUSH_KEY = ANDROID_CODE_PUSH_STAGING_KEY;
       }
     } else {
       if (releaseMode) {
         // iOS release
-        CODE_PUSH_KEY = '3bd_C15V7ia_g3yZIZKWcEpX1XsGsbBkxGjug';
+        CODE_PUSH_KEY = IOS_CODE_PUSH_PRODUCTION_KEY;
       } else {
         // iOS beta
-        CODE_PUSH_KEY = 'gYBzTn3BcoDNnk_-ngS950L6UUfjc_YheO5xe';
+        CODE_PUSH_KEY = IOS_CODE_PUSH_STAGING_KEY;
       }
     }
     CodePush.disallowRestart();

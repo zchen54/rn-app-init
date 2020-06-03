@@ -62,7 +62,7 @@ yarn run ios
 // Xcode -> target -> General -> Identity
 //    Display Name: Data2Go-Beta
 //    Bundle Identifier: com.Seacos.Data2Go.test
-//    CodePushDeploymentKey: gYBzTn3BcoDNnk_-ngS950L6UUfjc_YheO5xe
+//    CodePushDeploymentKey: f7KnDdTstHsQ0bEpJkw1j5S7roMUb3f9OmhA-
 
   yarn run bundle-ios
 
@@ -82,7 +82,7 @@ yarn run ios
 //    Bundle Identifier: com.Seacos.Data2Go
 //    Version: [like 1.0 | 2.0 for Major update, 1.1 | 1.2 for Minor update, 1.0.1 | 1.0.2 for Debug]
 //    Build: [like 1, 2, 3, 4 and Automatic incremental]
-//    CodePushDeploymentKey: 3bd_C15V7ia_g3yZIZKWcEpX1XsGsbBkxGjug
+//    CodePushDeploymentKey: 6fnlOAhn1XJP3LSd8Zh2cGOIZ3qqtYgIBFCr8
 
   yarn run bundle-ios
 

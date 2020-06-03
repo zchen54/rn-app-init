@@ -29,11 +29,13 @@ import {FONT_FAMILY, DColors} from '../styles';
 import {TitleBarNew} from '../components';
 import {Toast, Portal, Icon} from '@ant-design/react-native';
 import {fieldTypes, toastTips, customFormat} from '../constants';
-import {ErrorMessage_Network_Offline, PlatFormAndroid} from '../../env';
+import {
+  ErrorMessage_Network_Offline,
+  PlatFormAndroid,
+  GOOGLE_MAPS_API_KEY,
+} from '../../env';
 import moment from 'moment';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-
-const GOOGLE_API_KEY = 'AIzaSyAHiNLuE34rArSOlQmGKob57JX9FspJ3dg';
 
 interface Props {
   navigation: any;

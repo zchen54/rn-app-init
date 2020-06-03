@@ -1,11 +1,11 @@
+import {GOOGLE_MAPS_API_KEY} from '../../env';
+
 // 谷歌地图服务
 // https://console.cloud.google.com/apis/credentials?folder=&organizationId=&project=gleaming-vision-274810
 
-const GOOGLE_API_KEY = 'AIzaSyAHiNLuE34rArSOlQmGKob57JX9FspJ3dg';
-
 // 通过经纬度解析地址
 export const reverseGeoCoding = (latitude: number, longitude: number) => {
-  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_API_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GOOGLE_MAPS_API_KEY}`;
   console.log(latitude, longitude, url);
   return fetch(url, {
     method: 'GET',
@@ -22,7 +22,7 @@ export const reverseGeoCoding = (latitude: number, longitude: number) => {
 
 // 通过经纬度搜索附近
 export const nearbySearchByLatLng = (latitude: number, longitude: number) => {
-  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&key=${GOOGLE_API_KEY}`;
+  const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1500&key=${GOOGLE_MAPS_API_KEY}`;
   console.log(latitude, longitude, url);
   return fetch(url, {
     method: 'GET',
@@ -46,8 +46,8 @@ export const placeAutoComplete = (
 ) => {
   const url =
     latitude && longitude
-      ? `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&location=${latitude},${longitude}&radius=3000&strictbounds&key=${GOOGLE_API_KEY}&sessiontoken=${sessionToken}`
-      : `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${GOOGLE_API_KEY}&sessiontoken=${sessionToken}`;
+      ? `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&location=${latitude},${longitude}&radius=3000&strictbounds&key=${GOOGLE_MAPS_API_KEY}&sessiontoken=${sessionToken}`
+      : `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${input}&key=${GOOGLE_MAPS_API_KEY}&sessiontoken=${sessionToken}`;
 
   console.log(latitude, longitude, url);
   return fetch(url, {
@@ -65,7 +65,7 @@ export const placeAutoComplete = (
 
 // 获取地址详情
 export const getPlaceDetail = (place_id: string, sessionToken?: number) => {
-  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&fields=place_id,name,geometry,formatted_address&key=${GOOGLE_API_KEY}&sessiontoken=${sessionToken}`;
+  const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${place_id}&fields=place_id,name,geometry,formatted_address&key=${GOOGLE_MAPS_API_KEY}&sessiontoken=${sessionToken}`;
 
   console.log('placeDetail', url);
   return fetch(url, {

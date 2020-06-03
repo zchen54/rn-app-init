@@ -186,11 +186,10 @@ android {
         //     manifestPlaceholders = [
         //         APP_NAME : "@string/app_name_beta"
         //     ]
-        //     buildConfigField "String", "CODEPUSH_KEY", '"Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv"'
+        //     buildConfigField "String", "CODEPUSH_KEY", '"e0u1THiNf8jRN6_6t3qriW7gcrBbnvOXs7vRX"'
         //     signingConfig signingConfigs.release
         //     minifyEnabled enableProguardInReleaseBuilds
         //     proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        //     buildConfigField "String", "CODEPUSH_KEY", '"Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv"'
         //     matchingFallbacks = ['beta', 'debug', 'release']
         // }
 
@@ -207,7 +206,7 @@ android {
             manifestPlaceholders = [
                 APP_NAME : "@string/app_name_beta"
             ]
-            buildConfigField "String", "CODEPUSH_KEY", '"Kg21JGpfGRcZ2KLhbSE0eLuSjv3uWahgKtJyv"'
+            buildConfigField "String", "CODEPUSH_KEY", '"e0u1THiNf8jRN6_6t3qriW7gcrBbnvOXs7vRX"'
             // ==========Beta-END===================
 
             // // ==========Release======================
@@ -218,7 +217,7 @@ android {
             // manifestPlaceholders = [
             //     APP_NAME : "@string/app_name"
             // ]
-            // buildConfigField "String", "CODEPUSH_KEY", '"29ccTwr8evNW0KlA9VQWf-NWrNj09I7gslXb3"'
+            // buildConfigField "String", "CODEPUSH_KEY", '"mxUfod7ERDwL5Ex3aZ1bmJt9_7Uk_8hPi5EbW"'
             // // ==========Release-END===================
 
 

@@ -2,5 +2,5 @@
     <string name="app_name">LCP</string>
     <string name="app_name_beta">LCP_beta</string>
     <string name="app_name_debug">LCP_dev</string>
-    <string moduleConfig="true" name="CodePushDeploymentKey">29ccTwr8evNW0KlA9VQWf-NWrNj09I7gslXb3</string>
+    <string moduleConfig="true" name="CodePushDeploymentKey">mxUfod7ERDwL5Ex3aZ1bmJt9_7Uk_8hPi5EbW</string>
 </resources>
