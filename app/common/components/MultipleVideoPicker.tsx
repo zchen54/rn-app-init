@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect} from 'react';
 import ImagePicker from 'react-native-image-picker';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 import {Modal, Toast, Portal} from '@ant-design/react-native';
 import Video from 'react-native-video';
-import {DMoviePlayer} from './DMoviePlayer';
+import {VideoPlayer} from './VideoPlayer';
 import {
   setSizeWithPx, // 设置字体 px 转 dp
   uploadVideo,
@@ -15,10 +15,6 @@ import {ErrorMessage_Network_Offline} from '../../env';
 const addImg = require('../../assets/images/template/Add-picture.png');
 const deleteImg = require('../../assets/images/template/delete-gray.png');
 
-interface State {
-  selectVideoSource: string;
-  uploadOrLocal: boolean;
-}
 interface Props {
   maxFiles?: number;
   source: string;
@@ -28,42 +24,34 @@ interface Props {
   isCollectData?: boolean;
 }
 
-export class MultipleVideoPicker extends Component<Props, State> {
-  sourceArr: any = [];
-  loadingToastKey: any;
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      selectVideoSource: '',
-      uploadOrLocal: false,
-    };
-    this.loadingToastKey = null;
-  }
+export const MultipleVideoPicker = (props: Props) => {
+  const {maxFiles, source, durationLimit, handleSelect, authToken} = props;
+  const [selectVideoSource, setSelectVideoSource] = useState('');
+  let loadingToastKey: any = null;
+  let sourceArr: any = [];
 
-  componentWillUnmount() {
-    Portal.remove(this.loadingToastKey);
-    this.loadingToastKey = null;
-  }
+  useEffect(() => {
+    return () => {
+      loadingToastKey = null;
+      sourceArr = [];
+    };
+  }, []);
 
   //选择视频
-  selectVideoTapped = () => {
-    const {isCollectData} = this.props;
+  function selectVideoTapped() {
     isNetworkConnected()
       .then(isConnected => {
         if (isConnected) {
-          this.handleSelectVideo(true);
-        } else if (isCollectData) {
-          this.handleSelectVideo(false);
+          handleSelectVideo();
         }
       })
       .catch(error => {
         console.log(error);
       });
-  };
+  }
 
-  handleSelectVideo = (uploadOrLocal: boolean) => {
-    const {durationLimit} = this.props;
-    const options = {
+  function handleSelectVideo() {
+    const options: any = {
       title: 'Choose Video',
       cancelButtonTitle: 'Cancel',
       takePhotoButtonTitle: 'Record video',
@@ -88,19 +76,14 @@ export class MultipleVideoPicker extends Component<Props, State> {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        this.setState({
-          uploadOrLocal,
-          selectVideoSource: response.uri,
-        });
-        this.loadingToastKey = Toast.loading('Loading...', 0);
+        setSelectVideoSource(response.uri);
+        loadingToastKey = Toast.loading('Loading...', 0);
       }
     });
-  };
+  }
 
-  onLoad = (data: any) => {
-    const {authToken, durationLimit} = this.props;
-    const {uploadOrLocal, selectVideoSource} = this.state;
-    Portal.remove(this.loadingToastKey);
+  function onLoad(data: any) {
+    Portal.remove(loadingToastKey);
     console.log('load video success', data);
     // data.duration有几十毫秒的误差
     if (parseInt(data.duration) > durationLimit) {
@@ -111,102 +94,78 @@ export class MultipleVideoPicker extends Component<Props, State> {
           {
             text: 'OK',
             onPress: () => {
-              this.setState({
-                selectVideoSource: '',
-                uploadOrLocal: false,
-              });
+              setSelectVideoSource('');
             },
           },
         ],
       );
     } else {
-      if (uploadOrLocal) {
-        uploadVideo(API_v2.uploadFile, [selectVideoSource], authToken).then(
-          (res: any) => {
-            console.log('Response =---- ', res);
-            if (res.result === 'Success') {
-              this.sourceArr.push(...res.data);
-              this.props.handleSelect(this.sourceArr.join(','));
-              this.setState({
-                selectVideoSource: '',
-                uploadOrLocal: false,
-              });
-            }
-          },
-        );
-      } else {
-        console.log('Response =---- ', selectVideoSource);
-        this.sourceArr.push(selectVideoSource);
-        this.props.handleSelect(this.sourceArr.join(','));
-        this.setState({
-          selectVideoSource: '',
-          uploadOrLocal: false,
-        });
-      }
+      uploadVideo(API_v2.uploadFile, [selectVideoSource], authToken).then(
+        (res: any) => {
+          console.log('Response =---- ', res);
+          if (res.result === 'Success') {
+            sourceArr.push(...res.data);
+            handleSelect(sourceArr.join(','));
+            setSelectVideoSource('');
+          }
+        },
+      );
     }
-  };
+  }
 
-  onError = (data: any) => {
-    Portal.remove(this.loadingToastKey);
-    this.setState({
-      selectVideoSource: '',
-      uploadOrLocal: false,
-    });
+  function onError(data: any) {
+    Portal.remove(loadingToastKey);
+    setSelectVideoSource('');
     Toast.fail('Select video error', 1);
     console.log('Select video error', data);
-  };
-
-  handleDeleteVideo = (index: number) => {
-    this.sourceArr.splice(index, 1);
-    this.props.handleSelect(this.sourceArr.join(','), null);
-  };
-
-  render() {
-    const {source, maxFiles} = this.props;
-    const {selectVideoSource} = this.state;
-
-    this.sourceArr = !source ? [] : source.split(',');
-
-    return (
-      <View style={styles.container}>
-        {this.sourceArr.map((item: any, index: number) => (
-          <View style={styles.videoView} key={index}>
-            <DMoviePlayer
-              // source={require("./video.mp4")} // 视频的URL地址，或者本地地址
-              source={item}
-              width={setSizeWithPx(980)}
-              height={setSizeWithPx(560)}
-            />
-            <TouchableOpacity
-              key="newPicker"
-              onPress={() => {
-                this.handleDeleteVideo(index);
-              }}
-              style={styles.deleteBtn}>
-              <Image style={styles.deleteIcon} source={deleteImg} />
-            </TouchableOpacity>
-          </View>
-        ))}
-        {!maxFiles || this.sourceArr.length < maxFiles ? (
-          <TouchableOpacity
-            onPress={this.selectVideoTapped.bind(this)}
-            style={[styles.avatar, styles.avatarContainer]}>
-            <Image style={styles.addIcon} source={addImg} />
-          </TouchableOpacity>
-        ) : null}
-        {selectVideoSource !== '' ? (
-          <Video
-            source={{uri: selectVideoSource}}
-            rate={0}
-            paused={true}
-            onLoad={this.onLoad}
-            onError={this.onError}
-          />
-        ) : null}
-      </View>
-    );
   }
-}
+
+  function handleDeleteVideo(index: number) {
+    sourceArr.splice(index, 1);
+    handleSelect(sourceArr.join(','), null);
+  }
+
+  sourceArr = !source ? [] : source.split(',');
+
+  return (
+    <View style={styles.container}>
+      {sourceArr.map((item: any, index: number) => (
+        <View style={styles.videoView} key={index}>
+          <VideoPlayer
+            // source={require("./video.mp4")} // 视频的URL地址，或者本地地址
+            source={item}
+            width={setSizeWithPx(980)}
+            height={setSizeWithPx(560)}
+          />
+          <TouchableOpacity
+            key="newPicker"
+            onPress={() => {
+              handleDeleteVideo(index);
+            }}
+            style={styles.deleteBtn}>
+            <Image style={styles.deleteIcon} source={deleteImg} />
+          </TouchableOpacity>
+        </View>
+      ))}
+      {!maxFiles || sourceArr.length < maxFiles ? (
+        <TouchableOpacity
+          onPress={selectVideoTapped}
+          style={[styles.avatar, styles.avatarContainer]}>
+          <Image style={styles.addIcon} source={addImg} />
+        </TouchableOpacity>
+      ) : null}
+      {selectVideoSource !== '' ? (
+        <Video
+          source={{uri: selectVideoSource}}
+          rate={0}
+          paused={true}
+          onLoad={onLoad}
+          onError={onError}
+        />
+      ) : null}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
