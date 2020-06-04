@@ -18,7 +18,6 @@ import {
   setSizeWithPx, // 设置字体 px 转 dp
 } from '../utils';
 
-interface State {}
 interface Props {
   visible: boolean;
   imageUrls: any;
@@ -26,45 +25,39 @@ interface Props {
   onClose: () => void;
 }
 
-export class ImagePreview extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
+export const ImagePreview = (props: Props) => {
+  const {visible, imageUrls, index, onClose} = props;
 
-  handleSave = (url: string) => {
+  function handleSave(url: string) {
     console.log('save photo', url);
-  };
-
-  render() {
-    const {visible, imageUrls, index, onClose} = this.props;
-    return (
-      <View
-        style={{
-          padding: 10,
-        }}>
-        <Modal
-          popup
-          visible={visible}
-          transparent={false}
-          animationType="slide-up"
-          onClose={onClose}>
-          <View
-            style={{
-              width: deviceWidth,
-              height: deviceHeight,
-            }}>
-            <ImageViewer
-              imageUrls={imageUrls}
-              index={index}
-              enableSwipeDown={true}
-              onSwipeDown={onClose}
-              onClick={onClose}
-              saveToLocalByLongPress={false}
-            />
-          </View>
-        </Modal>
-      </View>
-    );
   }
-}
+
+  return (
+    <View
+      style={{
+        padding: 10,
+      }}>
+      <Modal
+        popup
+        visible={visible}
+        transparent={false}
+        animationType="slide-up"
+        onClose={onClose}>
+        <View
+          style={{
+            width: deviceWidth,
+            height: deviceHeight,
+          }}>
+          <ImageViewer
+            imageUrls={imageUrls}
+            index={index}
+            enableSwipeDown={true}
+            onSwipeDown={onClose}
+            onClick={onClose}
+            saveToLocalByLongPress={false}
+          />
+        </View>
+      </Modal>
+    </View>
+  );
+};

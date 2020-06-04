@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {DColors, DFontSize, FONT_FAMILY} from '../../common/styles';
+import {DColors, DFontSize, FONT_FAMILY} from '../styles';
 import {
   setSize, // 设置宽高
   deviceHeight, // 设备高度
@@ -15,11 +15,11 @@ import {
   statusBarHeight,
   titleHeight,
   setSizeWithPx, // 设置字体 px 转 dp
-} from '../../common/utils';
+} from '../utils';
+import {NetworkStateBar} from './NetworkStateBar';
 
 const backIcon = require('../../assets/images/template/Back.png');
 
-interface State {}
 interface Props {
   title: string; // 标题
   navigation: any; // 导航器
@@ -31,80 +31,42 @@ interface Props {
   titleColor?: string; // 标题的文字颜色
   right?: any; // 右侧按钮的文字或者组件
   rightImage?: any; // 右侧按钮的图标
-  LifeImage?: any; // 左侧按钮的图片
+  leftImage?: any; // 左侧按钮的图片
   statusBarBgColor?: string; // 状态栏背景色
   barStyle?: any; // 状态栏样式
+  middleStyle?: any; //标题样式
+  isStatusBAr?: boolean; //是否存在statusbar
 }
 
-export class TitleBar extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-  }
+export const TitleBar = (props: Props) => {
+  const {
+    title,
+    navigation,
+    hideLeftArrow,
+    pressLeft,
+    pressRight,
+    left,
+    backgroundColor,
+    titleColor,
+    right,
+    rightImage,
+    leftImage,
+    statusBarBgColor,
+    barStyle,
+    middleStyle,
+    isStatusBAr,
+  } = props;
 
-  static defaultProps = {
-    title: '',
-    hideLeftArrow: false,
-    pressRight: () => {},
-  };
-
-  back() {
-    if (this.props.pressLeft) {
-      this.props.pressLeft();
+  function handleGoBack() {
+    if (pressLeft) {
+      pressLeft();
       return;
     }
-    this.props.navigation.goBack();
+    navigation.goBack();
   }
 
-  render() {
-    const {backgroundColor, titleColor} = this.props;
-    // console.log(deviceWidth, deviceHeight, statusBarHeight);
-    return (
-      <View
-        style={[
-          TitleStyle.titleBar,
-          backgroundColor ? {backgroundColor: backgroundColor} : null,
-        ]}>
-        <StatusBar
-          backgroundColor={this.props.statusBarBgColor || 'rgba(0,0,0,0)'}
-          // barStyle={this.props.barStyle || "dark-content"}
-          barStyle="dark-content"
-          translucent={true}
-        />
-        <View style={TitleStyle.statusBar} />
-
-        <View style={TitleStyle.titleBarContent}>
-          {this.props.hideLeftArrow ? (
-            <View style={TitleStyle.left} />
-          ) : (
-            <TouchableOpacity
-              activeOpacity={1}
-              onPress={this.back.bind(this)}
-              style={TitleStyle.left}>
-              <Image
-                style={TitleStyle.titleLeftImage}
-                source={this.props.LifeImage || backIcon}
-              />
-              <Text style={TitleStyle.leftText}>{this.props.left}</Text>
-            </TouchableOpacity>
-          )}
-          <View style={TitleStyle.middle}>
-            <Text
-              numberOfLines={1}
-              style={[
-                TitleStyle.middleTitle,
-                titleColor ? {color: titleColor} : null,
-              ]}>
-              {this.props.title}
-            </Text>
-          </View>
-          {this.renderRight()}
-        </View>
-      </View>
-    );
-  }
-
-  renderRight() {
-    if (!this.props.right && !this.props.rightImage) {
+  const renderRight = () => {
+    if (!right && !rightImage) {
       return <View style={TitleStyle.right} />;
     }
     return (
@@ -112,34 +74,84 @@ export class TitleBar extends Component<Props, State> {
         activeOpacity={1}
         style={TitleStyle.right}
         onPress={() => {
-          this.props.pressRight();
+          pressRight();
         }}>
-        {typeof this.props.right == 'object' ? (
-          this.props.right
+        {typeof right == 'object' ? (
+          right
         ) : (
-          <Text style={TitleStyle.rightText}>{this.props.right}</Text>
+          <Text style={TitleStyle.rightText}>{right}</Text>
         )}
-        {this.props.rightImage ? (
-          <Image style={TitleStyle.rightImage} source={this.props.rightImage} />
+        {rightImage ? (
+          <Image style={TitleStyle.rightImage} source={rightImage} />
         ) : null}
       </TouchableOpacity>
     );
-  }
-}
+  };
+
+  // console.log(deviceWidth, deviceHeight, statusBarHeight);
+  return (
+    <View
+      style={[
+        TitleStyle.titleBar,
+        backgroundColor ? {backgroundColor: backgroundColor} : null,
+        isStatusBAr ? {minHeight: 48} : null,
+      ]}>
+      <StatusBar
+        backgroundColor={statusBarBgColor || 'rgba(0,0,0,0)'}
+        barStyle={barStyle || 'light-content'}
+        // barStyle="dark-content"
+        translucent={true}
+      />
+      {isStatusBAr ? null : <View style={TitleStyle.statusBar} />}
+
+      <View style={TitleStyle.titleBarContent}>
+        {hideLeftArrow ? (
+          <View style={TitleStyle.left} />
+        ) : (
+          <TouchableOpacity
+            activeOpacity={1}
+            onPress={handleGoBack}
+            style={TitleStyle.left}>
+            <Image
+              style={
+                backgroundColor === '#FFFFFF'
+                  ? {...TitleStyle.titleLeftImage, tintColor: '#1E9DFC'}
+                  : TitleStyle.titleLeftImage
+              }
+              source={leftImage || backIcon}
+            />
+            <Text style={TitleStyle.leftText}>{left}</Text>
+          </TouchableOpacity>
+        )}
+        <View style={{...TitleStyle.middle, ...middleStyle}}>
+          <Text
+            numberOfLines={1}
+            style={[
+              TitleStyle.middleTitle,
+              titleColor ? {color: titleColor} : null,
+            ]}>
+            {title}
+          </Text>
+        </View>
+        {renderRight()}
+      </View>
+
+      <NetworkStateBar />
+    </View>
+  );
+};
 
 const TitleStyle = StyleSheet.create({
   titleBar: {
     width: deviceWidth,
-    height: titleHeight,
-    backgroundColor: '#fff',
-    borderBottomColor: '#eee',
-    borderBottomWidth: 1,
+    minHeight: statusBarHeight + 48,
+    backgroundColor: DColors.mainColor,
   },
   titleBarContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: deviceWidth,
     justifyContent: 'space-between',
+    width: deviceWidth,
     height: titleHeight - statusBarHeight,
   },
   titleBarSearchContent: {
@@ -191,33 +203,33 @@ const TitleStyle = StyleSheet.create({
   },
 
   left: {
-    width: setSize(60),
+    width: 80,
     height: titleHeight - statusBarHeight,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingLeft: setSize(10),
+    paddingLeft: 14,
   },
   middle: {
-    width: deviceWidth - setSize(120),
+    minWidth: deviceWidth / 4,
     height: titleHeight - statusBarHeight,
     justifyContent: 'center',
     alignItems: 'center',
   },
   middleTitle: {
-    fontSize: setSizeWithPx(48),
-    color: DColors.title,
+    color: '#FFFFFF',
+    fontSize: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
   right: {
-    width: setSize(60),
+    width: 80,
     height: titleHeight - statusBarHeight,
+    paddingRight: 14,
     flexDirection: 'row',
-    justifyContent: 'flex-end',
     alignItems: 'center',
-    paddingRight: setSize(10),
+    justifyContent: 'flex-end',
   },
 
   leftText: {
@@ -228,19 +240,23 @@ const TitleStyle = StyleSheet.create({
   },
 
   rightText: {
-    fontSize: setSizeWithPx(30),
-    color: 'white',
-    alignItems: 'center',
+    fontSize: 16,
+    color: '#FFFEFE',
     justifyContent: 'center',
   },
   rightImage: {
     marginLeft: setSize(5),
+    width: 20,
+    height: 19,
     resizeMode: 'contain',
+    tintColor: '#FFFFFF',
   },
-
   titleLeftImage: {
+    width: 20,
+    height: 20,
     marginRight: setSize(5),
     resizeMode: 'contain',
+    tintColor: '#FFFFFF',
   },
 
   homeTitleIcon: {

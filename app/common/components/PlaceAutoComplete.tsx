@@ -26,7 +26,7 @@ import {
   getPlaceDetail,
 } from '..//utils';
 import {FONT_FAMILY, DColors} from '../styles';
-import {TitleBarNew} from '../components';
+import {TitleBar} from './TitleBar';
 import {Toast, Portal, Icon} from '@ant-design/react-native';
 import {fieldTypes, toastTips, customFormat} from '../constants';
 import {
@@ -294,7 +294,7 @@ export const PlaceAutoComplete = (props: Props) => {
         Keyboard.dismiss();
       }}>
       <View style={styles.container}>
-        <TitleBarNew
+        <TitleBar
           title={'Select Place'}
           right={<Icon name="check" color="#fff" />}
           pressRight={handleConfirm}
@@ -329,7 +329,7 @@ export const PlaceAutoComplete = (props: Props) => {
         </View>
         <Modal animationType="slide" transparent={true} visible={searchVisible}>
           <View style={styles.modalContainer}>
-            <TitleBarNew
+            <TitleBar
               title={'Search'}
               navigation={null}
               pressLeft={() => {

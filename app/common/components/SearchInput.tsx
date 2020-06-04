@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-interface State {}
+
 interface Props {
   value: string;
   placeholder?: string;
@@ -19,40 +19,34 @@ const Icon = {
   clearIcon: require('../../assets/images/template/Close.png'),
 };
 
-export class SearchInput extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
+export const SearchInput = (props: Props) => {
+  const {value, placeholder, onChange} = props;
 
-  render() {
-    const {value, placeholder, onChange} = this.props;
-    return (
-      <View style={styles.searchWrapper}>
-        <View style={styles.searchIconWrap}>
-          <Image style={{width: 16, height: 16}} source={Icon.SearchIcon} />
-        </View>
-        <TextInput
-          value={value}
-          placeholder={placeholder || 'Search'}
-          onChangeText={value => {
-            onChange(value);
-          }}
-          style={{flex: 1}}
-        />
-        {value !== '' && (
-          <TouchableOpacity
-            onPress={() => {
-              onChange('');
-            }}
-            style={styles.clearIconWrap}>
-            <Image style={{width: 12, height: 12}} source={Icon.clearIcon} />
-          </TouchableOpacity>
-        )}
+  return (
+    <View style={styles.searchWrapper}>
+      <View style={styles.searchIconWrap}>
+        <Image style={{width: 16, height: 16}} source={Icon.SearchIcon} />
       </View>
-    );
-  }
-}
+      <TextInput
+        value={value}
+        placeholder={placeholder || 'Search'}
+        onChangeText={value => {
+          onChange(value);
+        }}
+        style={{flex: 1}}
+      />
+      {value !== '' && (
+        <TouchableOpacity
+          onPress={() => {
+            onChange('');
+          }}
+          style={styles.clearIconWrap}>
+          <Image style={{width: 12, height: 12}} source={Icon.clearIcon} />
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   searchWrapper: {

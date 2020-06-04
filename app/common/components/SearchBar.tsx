@@ -16,31 +16,26 @@ const Icon = {
   SearchIcon: require('../../assets/images/Me/search.png'),
 };
 
-export class SearchBar extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
+export const SearchBar = (props: Props) => {
+  const {navigation, type, mode, dataObj} = props;
 
-  render() {
-    return (
-      <View>
-        <TouchableOpacity
-          onPress={() =>
-            this.props.navigation.navigate(this.props.mode, {
-              type: this.props.type,
-              dataObj: this.props.dataObj,
-            })
-          }>
-          <View style={styles.searchWrapper}>
-            <Image style={styles.imageStyle} source={Icon.SearchIcon} />
-            <Text style={styles.textStyle}>Search</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate(mode, {
+            type: type,
+            dataObj: dataObj,
+          })
+        }>
+        <View style={styles.searchWrapper}>
+          <Image style={styles.imageStyle} source={Icon.SearchIcon} />
+          <Text style={styles.textStyle}>Search</Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   searchWrapper: {

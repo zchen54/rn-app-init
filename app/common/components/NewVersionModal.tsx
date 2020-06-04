@@ -16,22 +16,16 @@ import {PlatFormAndroid} from '../../env';
 
 const updateBackground = require('../../assets/images/GuidePage/rocket.png');
 
-interface State {}
 interface Props {
   visible: boolean;
   newVersion: any;
   handleCloseModal: Function;
 }
 
-let hasFetch = false;
+export const NewVersionModal = (props: Props) => {
+  const {visible, newVersion, handleCloseModal} = props;
 
-export class NewVersionModal extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {};
-  }
-
-  handleUpdateApp = () => {
+  function handleUpdateApp() {
     const googlePlayUrl =
         'http://play.google.com/store/apps/details?id=com.data2go',
       appStoreUrl = 'itms-apps://itunes.apple.com/cn/app/1474206224?mt=8';
@@ -57,61 +51,54 @@ export class NewVersionModal extends Component<Props, State> {
         })
         .catch(err => console.error('An error occurred', err));
     }
-  };
+  }
 
-  render() {
-    const {visible, newVersion} = this.props;
-    console.log('render v', visible);
+  let contentArray = newVersion.content
+    ? newVersion.content.split(' /n ')
+    : [''];
 
-    let contentArray = newVersion.content
-      ? newVersion.content.split(' /n ')
-      : [''];
-    return (
-      <Modal visible={visible} transparent={true} animationType="fade">
-        <View style={styles.modalWrap}>
-          <View style={styles.infoWrap}>
-            <Image
-              source={updateBackground}
-              style={{width: 280, height: 132}}
-            />
-            <View style={styles.header}>
-              <Text style={styles.title}>New version</Text>
-              <Text style={styles.version}>{newVersion.versionName}</Text>
-            </View>
-            <View style={styles.content}>
-              {contentArray.map((item: string, index: number) => (
-                <Text key={index} style={styles.contentLine}>
-                  {item}
-                </Text>
-              ))}
-              <View
-                style={
-                  !newVersion.forceUpdate
-                    ? styles.buttonGroup
-                    : {...styles.buttonGroup, justifyContent: 'center'}
-                }>
-                {!newVersion.forceUpdate && (
-                  <TouchableOpacity
-                    style={styles.cancelButton}
-                    onPress={() => {
-                      this.props.handleCloseModal();
-                    }}>
-                    <Text style={styles.cancelButtonText}>Ignore</Text>
-                  </TouchableOpacity>
-                )}
+  return (
+    <Modal visible={visible} transparent={true} animationType="fade">
+      <View style={styles.modalWrap}>
+        <View style={styles.infoWrap}>
+          <Image source={updateBackground} style={{width: 280, height: 132}} />
+          <View style={styles.header}>
+            <Text style={styles.title}>New version</Text>
+            <Text style={styles.version}>{newVersion.versionName}</Text>
+          </View>
+          <View style={styles.content}>
+            {contentArray.map((item: string, index: number) => (
+              <Text key={index} style={styles.contentLine}>
+                {item}
+              </Text>
+            ))}
+            <View
+              style={
+                !newVersion.forceUpdate
+                  ? styles.buttonGroup
+                  : {...styles.buttonGroup, justifyContent: 'center'}
+              }>
+              {!newVersion.forceUpdate && (
                 <TouchableOpacity
-                  style={styles.confirmButton}
-                  onPress={this.handleUpdateApp}>
-                  <Text style={styles.confirmButtonText}>Update</Text>
+                  style={styles.cancelButton}
+                  onPress={() => {
+                    handleCloseModal();
+                  }}>
+                  <Text style={styles.cancelButtonText}>Ignore</Text>
                 </TouchableOpacity>
-              </View>
+              )}
+              <TouchableOpacity
+                style={styles.confirmButton}
+                onPress={handleUpdateApp}>
+                <Text style={styles.confirmButtonText}>Update</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
-      </Modal>
-    );
-  }
-}
+      </View>
+    </Modal>
+  );
+};
 
 const styles = StyleSheet.create({
   modalWrap: {

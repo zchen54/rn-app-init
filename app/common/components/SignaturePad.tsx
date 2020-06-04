@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   StyleSheet,
   Text,
@@ -31,30 +31,25 @@ import {
   isNetworkConnected,
 } from '../utils';
 import {ErrorMessage_Network_Offline, PlatFormAndroid} from '../../env';
-import {TitleBarNew} from './TitleBarNew';
+import {TitleBar} from './TitleBar';
 
 const deleteImg = require('../../assets/images/template/delete-gray.png');
 
-interface State {
-  modalVisible: boolean;
-  connected: boolean;
-}
 interface Props {
   source: string;
   pickerStyle?: any;
   handleConfirm: (source: string) => void;
   authToken: string;
 }
-export class DSignaturePad extends React.Component<Props, State> {
-  SignatureDom: any;
-  constructor(props: Props) {
-    super(props);
-    this.state = {modalVisible: false, connected: false};
-  }
+export const SignaturePad = (props: Props) => {
+  const {source, pickerStyle, handleConfirm, authToken} = props;
 
-  componentWillMount() {}
+  const signatureRef: any = useRef(null);
 
-  handleOpen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [connected, setConnected] = useState(false);
+
+  function handleOpen() {
     isNetworkConnected()
       .then(isConnected => {
         if (isConnected) {
@@ -67,18 +62,19 @@ export class DSignaturePad extends React.Component<Props, State> {
           //     Orientation.lockToLandscape();
           //   }
           // });
-
-          this.setState({modalVisible: true, connected: true});
+          setModalVisible(true);
+          setConnected(true);
         } else {
-          this.setState({modalVisible: true, connected: false});
+          setModalVisible(true);
+          setConnected(false);
         }
       })
       .catch(error => {
         console.log(error);
       });
-  };
+  }
 
-  handleClose = () => {
+  function handleClose() {
     // Orientation.getOrientation((err, orientation) => {
     //   // console.log("getOrientation", err, orientation);
     //   if (orientation === "PORTRAIT") {
@@ -89,10 +85,10 @@ export class DSignaturePad extends React.Component<Props, State> {
     //   }
     // });
 
-    this.setState({modalVisible: false});
-  };
+    setModalVisible(false);
+  }
 
-  handleDelete = () => {
+  function handleDelete() {
     Modal.alert('Delete signature ?', '', [
       {
         text: 'Cancel',
@@ -104,23 +100,21 @@ export class DSignaturePad extends React.Component<Props, State> {
       {
         text: 'OK',
         onPress: () => {
-          this.props.handleConfirm('');
+          handleConfirm('');
         },
       },
     ]);
-  };
+  }
 
-  saveSign = () => {
-    this.SignatureDom.saveImage();
-  };
+  function saveSign() {
+    signatureRef.saveImage();
+  }
 
-  resetSign = () => {
-    this.SignatureDom.resetImage();
-  };
+  function resetSign() {
+    signatureRef.resetImage();
+  }
 
-  _onSaveEvent = (result: any) => {
-    const {authToken} = this.props;
-    const {connected} = this.state;
+  function _onSaveEvent(result: any) {
     // console.log(result);
     if (connected) {
       uploadImage(
@@ -130,59 +124,52 @@ export class DSignaturePad extends React.Component<Props, State> {
       ).then((res: any) => {
         console.log('Response =---- ', res);
         if (res.result === 'Success') {
-          this.props.handleConfirm(res.data[0]);
+          handleConfirm(res.data[0]);
         }
       });
     } else {
-      this.props.handleConfirm('file://' + result.pathName);
+      handleConfirm('file://' + result.pathName);
     }
-    this.handleClose();
-  };
+    handleClose();
+  }
 
-  render() {
-    const {modalVisible} = this.state;
-    const {source, pickerStyle} = this.props;
-    // console.log("render signature", source, deviceWidth, deviceHeight);
-    return (
-      <View style={styles.container}>
-        {!source || source === '' ? (
-          <TouchableOpacity
+  // console.log("render signature", source, deviceWidth, deviceHeight);
+  return (
+    <View style={styles.container}>
+      {!source || source === '' ? (
+        <TouchableOpacity
+          style={
+            pickerStyle ? [styles.defaultView, pickerStyle] : styles.defaultView
+          }
+          onPress={handleOpen}>
+          <Text>Click here to sign</Text>
+        </TouchableOpacity>
+      ) : (
+        <View
+          style={
+            pickerStyle
+              ? [styles.signatureView, pickerStyle]
+              : styles.signatureView
+          }>
+          <Image
             style={
               pickerStyle
-                ? [styles.defaultView, pickerStyle]
-                : styles.defaultView
+                ? [styles.signatureImage, pickerStyle]
+                : styles.signatureImage
             }
-            onPress={this.handleOpen}>
-            <Text>Click here to sign</Text>
+            source={{
+              uri: source,
+            }}
+          />
+          <TouchableOpacity
+            key="newPicker"
+            onPress={handleDelete}
+            style={styles.deleteBtn}>
+            <Image style={styles.deleteIcon} source={deleteImg} />
           </TouchableOpacity>
-        ) : (
-          <View
-            style={
-              pickerStyle
-                ? [styles.signatureView, pickerStyle]
-                : styles.signatureView
-            }>
-            <Image
-              style={
-                pickerStyle
-                  ? [styles.signatureImage, pickerStyle]
-                  : styles.signatureImage
-              }
-              source={{
-                uri: source,
-              }}
-            />
-            <TouchableOpacity
-              key="newPicker"
-              onPress={() => {
-                this.handleDelete();
-              }}
-              style={styles.deleteBtn}>
-              <Image style={styles.deleteIcon} source={deleteImg} />
-            </TouchableOpacity>
-          </View>
-        )}
-        {/* <Modal
+        </View>
+      )}
+      {/* <Modal
           popup
           transparent={false}
           visible={modalVisible}
@@ -194,7 +181,7 @@ export class DSignaturePad extends React.Component<Props, State> {
             <View style={styles.signature}>
               <SignatureCapture
                 ref={(dom: any) => {
-                  this.SignatureDom = dom;
+                  this.signatureRef = dom;
                 }}
                 style={styles.SignatureCaptureView}
                 onSaveEvent={this._onSaveEvent}
@@ -220,52 +207,48 @@ export class DSignaturePad extends React.Component<Props, State> {
             </View>
           </View>
         </Modal> */}
-        <RnModal
-          visible={modalVisible}
-          transparent={true}
-          animationType="slide">
-          <View style={styles.modalWrapper}>
-            <TitleBarNew
-              title={'Signature'}
-              navigation={null}
-              pressLeft={this.handleClose}
-              isStatusBAr={Platform.OS === PlatFormAndroid ? true : false}
+      <RnModal visible={modalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalWrapper}>
+          <TitleBar
+            title={'Signature'}
+            navigation={null}
+            pressLeft={handleClose}
+            isStatusBAr={Platform.OS === PlatFormAndroid ? true : false}
+          />
+          <View style={styles.signature}>
+            <SignatureCapture
+              ref={signatureRef}
+              style={styles.SignatureCaptureView}
+              onSaveEvent={_onSaveEvent}
+              // onDragEvent={this._onDragEvent} // 涂画时的回调
+              showBorder={false} // 是否显示虚线边框（边框仅在iOS上显示）
+              saveImageFileInExtStorage={true} // 将图像文件保存在外部存储中
+              showNativeButtons={false} // 是否显示本机按钮“Save”和“Reset”
+              showTitleLabel={false} // 是否显示“x_ _ _ _ _ _ _ _ _ _”占位符，指示要签名的位置
+              // viewMode={"landscape"} // 'portrait' | 'landscape' 设置屏幕方向
+              // maxSize ：设置图像的最大尺寸保持纵横比，默认为500
             />
-            <View style={styles.signature}>
-              <SignatureCapture
-                ref={(dom: any) => {
-                  this.SignatureDom = dom;
-                }}
-                style={styles.SignatureCaptureView}
-                onSaveEvent={this._onSaveEvent}
-                // onDragEvent={this._onDragEvent} // 涂画时的回调
-                showBorder={false} // 是否显示虚线边框（边框仅在iOS上显示）
-                saveImageFileInExtStorage={true} // 将图像文件保存在外部存储中
-                showNativeButtons={false} // 是否显示本机按钮“Save”和“Reset”
-                showTitleLabel={false} // 是否显示“x_ _ _ _ _ _ _ _ _ _”占位符，指示要签名的位置
-                // viewMode={"landscape"} // 'portrait' | 'landscape' 设置屏幕方向
-                // maxSize ：设置图像的最大尺寸保持纵横比，默认为500
-              />
-            </View>
-            <View style={styles.buttonWrapper}>
-              <TouchableWithoutFeedback onPress={this.resetSign}>
-                <View style={styles.button}>
-                  <Text style={styles.text}>Reset</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.saveSign}>
-                <View style={styles.button}>
-                  <Text style={styles.text}>Save</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
           </View>
-        </RnModal>
-      </View>
-    );
-  }
-}
+          <View style={styles.buttonWrapper}>
+            <TouchableWithoutFeedback onPress={resetSign}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Reset</Text>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={saveSign}>
+              <View style={styles.button}>
+                <Text style={styles.text}>Save</Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </View>
+      </RnModal>
+    </View>
+  );
+};
+
 export const signatureHeight = (500 / 984) * (deviceWidth - 32);
+
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',

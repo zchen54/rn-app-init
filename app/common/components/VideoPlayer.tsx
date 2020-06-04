@@ -147,6 +147,7 @@ export const VideoPlayer = (props: Props) => {
   const renderVideoPlayer = () => {
     const {url, title} = videoInfo;
     let mainHeight = deviceHeight;
+    const playIconName: any = playIcon;
     if (Platform.OS === PlatFormAndroid) {
       mainHeight =
         orientation === 'PORTRAIT'
@@ -238,7 +239,7 @@ export const VideoPlayer = (props: Props) => {
                 },
               ]}>
               <TouchableOpacity onPress={() => play()}>
-                <Icon name={playIcon} size={18} color="#fff" />
+                <Icon name={playIconName} size={18} color="#fff" />
               </TouchableOpacity>
               <View style={vStyles.progressStyle}>
                 <Text style={vStyles.timeStyle}>
