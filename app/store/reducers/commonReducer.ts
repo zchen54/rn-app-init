@@ -8,6 +8,10 @@ export interface ActionSheetActionType {
 }
 
 export interface InitialState {
+  // iPhone 全面屏适配
+  statusBarStyle: 'default' | 'light-content' | 'dark-content' | undefined;
+  safeAreaTopColor: string;
+  safeAreaBottomColor: string;
   // 更多操作
   actionSheetVisible: boolean;
   actionSheetTitle: string;
@@ -18,6 +22,9 @@ export interface InitialState {
   imagePreviewUrls: Array<{url: string}>;
 }
 const initialState: InitialState = {
+  statusBarStyle: 'dark-content',
+  safeAreaTopColor: '#fff',
+  safeAreaBottomColor: '#fff',
   actionSheetVisible: false,
   actionSheetTitle: '',
   actionSheetActions: [],
@@ -28,6 +35,22 @@ const initialState: InitialState = {
 
 export const commonReducer = (state = initialState, action: any) => {
   switch (action.type) {
+    case ActionTypes.SET_SAFE_AREA_TOP_COLOR: {
+      const {color} = action;
+      return {
+        ...state,
+        safeAreaTopColor: color,
+      };
+    }
+
+    case ActionTypes.SET_SAFE_AREA_BOTTOM_COLOR: {
+      const {color} = action;
+      return {
+        ...state,
+        safeAreaBottomColor: color,
+      };
+    }
+
     case ActionTypes.OPEN_ACTION_SHEET: {
       const {actions, title} = action;
       return {

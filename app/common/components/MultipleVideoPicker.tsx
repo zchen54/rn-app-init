@@ -19,9 +19,8 @@ interface Props {
   maxFiles?: number;
   source: string;
   durationLimit: number;
-  handleSelect: any;
-  authToken: string;
-  isCollectData?: boolean;
+  handleSelect: (value: string) => void;
+  authToken?: string;
 }
 
 export const MultipleVideoPicker = (props: Props) => {
@@ -100,16 +99,22 @@ export const MultipleVideoPicker = (props: Props) => {
         ],
       );
     } else {
-      uploadVideo(API_v2.uploadFile, [selectVideoSource], authToken).then(
-        (res: any) => {
-          console.log('Response =---- ', res);
-          if (res.result === 'Success') {
-            sourceArr.push(...res.data);
-            handleSelect(sourceArr.join(','));
-            setSelectVideoSource('');
-          }
-        },
-      );
+      if (authToken) {
+        uploadVideo(API_v2.uploadFile, [selectVideoSource], authToken).then(
+          (res: any) => {
+            console.log('Response =---- ', res);
+            if (res.result === 'Success') {
+              sourceArr.push(...res.data);
+              handleSelect(sourceArr.join(','));
+              setSelectVideoSource('');
+            }
+          },
+        );
+      } else {
+        sourceArr.push(selectVideoSource);
+        handleSelect(sourceArr.join(','));
+        setSelectVideoSource('');
+      }
     }
   }
 
@@ -173,7 +178,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   avatarContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,

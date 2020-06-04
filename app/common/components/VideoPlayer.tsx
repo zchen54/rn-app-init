@@ -29,8 +29,8 @@ const initOrientation: any = null;
 
 export const VideoPlayer = (props: Props) => {
   const {source, width, height} = props;
-  const player: any = useRef(null);
-  const videoPreview: any = useRef(null);
+  const playerRef: any = useRef(null);
+  const videoPreviewRef: any = useRef(null);
   const [videoModalVisible, setVideoModalVisible] = useState(false);
   const [rate, setRate] = useState(1.0);
   const [slideValue, setSlideValue] = useState(0.0);
@@ -89,8 +89,8 @@ export const VideoPlayer = (props: Props) => {
   }
 
   function onEnd() {
-    if (player) {
-      player.seek(0);
+    if (playerRef && playerRef.current) {
+      playerRef.current.seek(0);
     }
     setSlideValue(0.0);
     setCurrentTime(0.0);
@@ -99,7 +99,7 @@ export const VideoPlayer = (props: Props) => {
   }
 
   function videoError(error: any) {
-    Toast.fail('Video player error !');
+    Toast.fail('VideoPlayer error !');
     setLoadingVisible(false);
   }
 
@@ -177,7 +177,7 @@ export const VideoPlayer = (props: Props) => {
             //     "https://vd2.bdstatic.com/mda-jfff1srbcqxqkxeh/sc/mda-jfff1srbcqxqkxeh.mp4?auth_key=1562902805-0-0-789c96ab6e46ed0f5efd1beb6e9ccc46&bcevod_channel=searchbox_feed&pd=bjh&abtest=all"
             // }}
             source={{uri: url}}
-            ref={player}
+            ref={playerRef}
             rate={paused ? 0 : rate} // 控制暂停/播放，0 代表暂停paused, 1代表播放normal.
             volume={1.0} // 声音的放声音的放大倍数大倍数，0 为静音  ，1 为正常音量 ，更大的数字表示放大的倍数
             muted={false} // true代表静音，默认为false.
@@ -254,7 +254,7 @@ export const VideoPlayer = (props: Props) => {
                   step={1}
                   onValueChange={value => setCurrentTime(value)}
                   onSlidingComplete={value => {
-                    player.seek(value);
+                    playerRef.current.seek(value);
                   }}
                 />
                 <Text style={vStyles.timeStyle}>
@@ -304,10 +304,10 @@ export const VideoPlayer = (props: Props) => {
               //     "https://vd2.bdstatic.com/mda-jfff1srbcqxqkxeh/sc/mda-jfff1srbcqxqkxeh.mp4?auth_key=1562902805-0-0-789c96ab6e46ed0f5efd1beb6e9ccc46&bcevod_channel=searchbox_feed&pd=bjh&abtest=all"
               // }}
               source={{uri: url}}
-              ref={videoPreview}
+              ref={videoPreviewRef}
               paused={true}
               resizeMode="contain" // 视频的自适应伸缩铺放行为，contain、stretch、cover
-              onLoad={data => videoPreview.seek(1)}
+              onLoad={data => videoPreviewRef.current.seek(1)}
               style={{
                 width: videoWidth,
                 height: videoHeight,

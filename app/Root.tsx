@@ -22,6 +22,7 @@ Text.defaultProps = Object.assign({}, Text.defaultProps, {
 TextInput.defaultProps.allowFontScaling = false;
 
 export const Root = (props: any) => {
+  console.log('root props', props);
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

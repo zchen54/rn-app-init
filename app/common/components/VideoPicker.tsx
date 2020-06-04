@@ -18,8 +18,8 @@ const deleteImg = require('../../assets/images/template/delete-gray.png');
 interface Props {
   source: string;
   durationLimit: number;
-  handleSelect: any;
-  authToken: string;
+  handleSelect: (value: string) => void;
+  authToken?: string;
 }
 
 export const VideoPicker = (props: Props) => {
@@ -96,15 +96,20 @@ export const VideoPicker = (props: Props) => {
         ],
       );
     } else {
-      uploadVideo(API_v2.uploadFile, [selectVideoSource], authToken).then(
-        (res: any) => {
-          console.log('Response =---- ', res);
-          if (res.result === 'Success') {
-            handleSelect(res.data[0]);
-            setSelectVideoSource('');
-          }
-        },
-      );
+      if (authToken) {
+        uploadVideo(API_v2.uploadFile, [selectVideoSource], authToken).then(
+          (res: any) => {
+            console.log('Response =---- ', res);
+            if (res.result === 'Success') {
+              handleSelect(res.data[0]);
+              setSelectVideoSource('');
+            }
+          },
+        );
+      } else {
+        handleSelect(selectVideoSource);
+        setSelectVideoSource('');
+      }
     }
   }
 
@@ -176,7 +181,7 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
   avatarContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f2f2f2',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 3,

@@ -1,6 +1,6 @@
 'use strict';
 
-export let releaseMode = false;
+export let releaseMode = true;
 const productionServer = 'https://www.template2data.com/api/';
 const testServer = 'https://data2go.allsworth.cn/api/';
 

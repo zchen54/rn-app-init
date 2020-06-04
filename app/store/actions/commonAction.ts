@@ -1,6 +1,23 @@
 import {ActionTypes} from '../types';
 import {ActionSheetActionType} from '../reducers/commonReducer';
 
+export const setStatusBarStyle = (
+  style: 'default' | 'light-content' | 'dark-content' | undefined,
+) => ({
+  type: ActionTypes.SET_STATUS_BAR_STYLE,
+  style,
+});
+
+export const setSafeAreaTopColor = (color: string) => ({
+  type: ActionTypes.SET_SAFE_AREA_TOP_COLOR,
+  color,
+});
+
+export const setSafeAreaBottomColor = (color: string) => ({
+  type: ActionTypes.SET_SAFE_AREA_BOTTOM_COLOR,
+  color,
+});
+
 export const openActionSheet = (
   actions: Array<ActionSheetActionType>,
   title?: string,

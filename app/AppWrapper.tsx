@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {Component, Fragment, useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {
   View,
@@ -42,15 +42,19 @@ const AppWrapper = (props: Props) => {
 
   useEffect(() => {
     const {isDebugMode, isBetaMode} = props.initialProperties;
+    console.log('AppWrapper props', props);
+
     console.log('isDebugMode', isDebugMode);
     console.log('isBetaMode', isBetaMode);
+    const {versionName, versionCode} = props.initialProperties;
+    console.log('versionName, versionCode', versionName, versionCode);
     if (Platform.OS === PlatFormAndroid) {
       let isRelease = !isDebugMode && !isBetaMode;
       setReleaseMode(isRelease);
     } else {
     }
 
-    // getVersion();
+    getVersion();
   }, []);
 
   // 获取版本号
@@ -62,12 +66,23 @@ const AppWrapper = (props: Props) => {
       setVersionCode(versionCode);
     } else {
       iOSToolModule.getAppVersion(
-        (error: any, versionName: string, versionCode: any) => {
-          console.log('getAppVersion---', error, versionName, versionCode);
+        (
+          error: any,
+          versionName: string,
+          versionCode: number,
+          bundleId: string,
+        ) => {
+          console.log(
+            `getAppVersion--- ${versionName} ${versionCode} ${bundleId}`,
+          );
+          if (bundleId) {
+            let isRelease = bundleId.indexOf('beta') < 0;
+            setReleaseMode(isRelease);
+          }
           if (error) {
             console.log(error);
           } else {
-            handleCheckNewVersion(versionName, versionCode);
+            // handleCheckNewVersion(versionName, versionCode);
             setVersionName(versionName);
             setVersionCode(versionCode);
           }
@@ -116,6 +131,9 @@ const AppWrapper = (props: Props) => {
   };
 
   const {
+    statusBarStyle,
+    safeAreaTopColor,
+    safeAreaBottomColor,
     actionSheetVisible,
     actionSheetTitle,
     actionSheetActions,
@@ -125,35 +143,45 @@ const AppWrapper = (props: Props) => {
   } = commonState;
 
   return (
-    <SafeAreaView style={iphoneSafeAreaStyle}>
-      <AppContainer
-      // screenProps={this.props}
-      // ref={navigatorRef => {
-      //   NavigationService.setTopLevelNavigator(navigatorRef);
-      // }}
+    <Fragment>
+      <SafeAreaView style={{flex: 0, backgroundColor: safeAreaTopColor}} />
+      <StatusBar
+        animated={true}
+        networkActivityIndicatorVisible={true}
+        backgroundColor={safeAreaTopColor}
+        barStyle={statusBarStyle}
       />
-      <ActionSheet
-        visible={actionSheetVisible}
-        title={actionSheetTitle}
-        actions={actionSheetActions}
-        onClose={() => {
-          dispatch(closeActionSheet());
-        }}
-      />
-      <ImagePreview
-        visible={imagePreviewVisible}
-        imageUrls={imagePreviewUrls}
-        index={imagePreviewIndex}
-        onClose={() => {
-          dispatch(closeImagePreview());
-        }}
-      />
-      <NewVersionModal
-        visible={updateModalVisible}
-        newVersion={newVersion}
-        handleCloseModal={closeControllerModal}
-      />
-    </SafeAreaView>
+      <SafeAreaView style={iphoneSafeAreaStyle}>
+        <AppContainer
+        // screenProps={this.props}
+        // ref={navigatorRef => {
+        //   NavigationService.setTopLevelNavigator(navigatorRef);
+        // }}
+        />
+        <ActionSheet
+          visible={actionSheetVisible}
+          title={actionSheetTitle}
+          actions={actionSheetActions}
+          onClose={() => {
+            dispatch(closeActionSheet());
+          }}
+        />
+        <ImagePreview
+          visible={imagePreviewVisible}
+          imageUrls={imagePreviewUrls}
+          index={imagePreviewIndex}
+          onClose={() => {
+            dispatch(closeImagePreview());
+          }}
+        />
+        <NewVersionModal
+          visible={updateModalVisible}
+          newVersion={newVersion}
+          handleCloseModal={closeControllerModal}
+        />
+      </SafeAreaView>
+      <SafeAreaView style={{flex: 0, backgroundColor: safeAreaBottomColor}} />
+    </Fragment>
   );
 };
 

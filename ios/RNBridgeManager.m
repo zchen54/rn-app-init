@@ -17,7 +17,9 @@ RCT_EXPORT_METHOD(getAppVersion:(RCTResponseSenderBlock)callback)
 {
   NSString *versionName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
   NSString *versionCode = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-  callback(@[[NSNull null],versionName,versionCode]);
+  NSString *bundleId = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIdentifier"];
+  
+  callback(@[[NSNull null],versionName,versionCode,bundleId]);
 }
 
 @end

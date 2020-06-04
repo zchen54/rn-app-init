@@ -11,6 +11,8 @@ import {Toast, Icon, Modal, Button} from '@ant-design/react-native';
 import {NavigationContainer, useFocusEffect} from '@react-navigation/native';
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 import HeaderButtons from '../../routes/HeaderButtons';
+import {releaseMode} from '../../env';
+import {DColors} from '../../common/styles/DColors';
 
 interface Props {
   navigation: any;
@@ -56,6 +58,11 @@ const HomeScreen = (props: Props) => {
     <>
       <StatusBar barStyle="dark-content" />
       <View style={styles.container}>
+        {releaseMode ? (
+          <Text style={{color: DColors.mainColor}}>Release</Text>
+        ) : (
+          <Text style={{color: DColors.auxiliaryOrange}}>Beta</Text>
+        )}
         <Text>Home Screen</Text>
         <Text>{author}</Text>
         <Button

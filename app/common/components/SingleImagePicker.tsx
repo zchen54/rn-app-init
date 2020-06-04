@@ -26,10 +26,10 @@ const deleteImg = require('../../assets/images/template/delete-gray.png');
 const rightIcon = require('../../assets/images/template/right_choose.png');
 
 interface Props {
-  source: any;
+  source: string;
   pickerStyle: any;
-  handleSelect: any;
-  authToken: string;
+  handleSelect: (value: string) => void;
+  authToken?: string;
 }
 
 export const SingleImagePicker = (props: Props) => {
@@ -92,14 +92,20 @@ export const SingleImagePicker = (props: Props) => {
 
   function handleConfirm() {
     const confirmFunction = (uri: string) => {
-      uploadImage(API_v2.uploadFile, [uri], authToken).then((res: any) => {
-        console.log('Server res ---> ', res);
-        if (res.result === 'Success') {
-          sourceArr.push(res.data[0]);
-        }
+      if (authToken) {
+        uploadImage(API_v2.uploadFile, [uri], authToken).then((res: any) => {
+          console.log('Server res ---> ', res);
+          if (res.result === 'Success') {
+            sourceArr.push(res.data[0]);
+          }
+          handleSelect(sourceArr.join(','));
+          handleClosePreviewWhenSelect();
+        });
+      } else {
+        sourceArr.push(uri);
         handleSelect(sourceArr.join(','));
         handleClosePreviewWhenSelect();
-      });
+      }
     };
 
     if (selectFullImage) {
@@ -211,6 +217,7 @@ export const SingleImagePicker = (props: Props) => {
           style={{
             width: deviceWidth,
             height: deviceHeight,
+            backgroundColor: '#000',
           }}>
           <View style={styles.previewView}>
             {imageUri !== '' ? (

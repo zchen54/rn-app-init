@@ -18,6 +18,7 @@ export * from './TitleBarWithTabs';
 export * from './MultipleImagePicker';
 export * from './MultipleVideoPicker';
 export * from './PlaceAutoComplete';
+export * from './VideoPicker';
 
 export const formatSearchResultText = (text: string, keyword: string) => {
   const textCharArray = text.split('');

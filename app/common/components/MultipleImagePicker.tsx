@@ -42,12 +42,12 @@ interface SelectedImage {
 const initSelectedImages: SelectedImage[] = [];
 
 interface Props {
-  source: any;
+  source: string;
   pickerStyle: any;
-  handleSelect: any;
+  handleSelect: (value: string) => void;
   multiple?: boolean;
   maxFiles?: number;
-  authToken: string;
+  authToken?: string;
 }
 
 export const MultipleImagePicker = (props: Props) => {
@@ -180,14 +180,20 @@ export const MultipleImagePicker = (props: Props) => {
   }
 
   function uploadImages(uris: string[]) {
-    uploadImage(API_v2.uploadFile, uris, authToken).then((res: any) => {
-      console.log('Server res ---> ', res);
-      if (res.result === 'Success' && Array.isArray(res.data)) {
-        sourceArr.push(...res.data);
-        handleSelect(sourceArr.join(','));
-      }
+    if (authToken) {
+      uploadImage(API_v2.uploadFile, uris, authToken).then((res: any) => {
+        console.log('Server res ---> ', res);
+        if (res.result === 'Success' && Array.isArray(res.data)) {
+          sourceArr.push(...res.data);
+          handleSelect(sourceArr.join(','));
+        }
+        handleCancelSelect();
+      });
+    } else {
+      sourceArr.push(uris);
+      handleSelect(sourceArr.join(','));
       handleCancelSelect();
-    });
+    }
   }
 
   function handleCancelSelect() {
@@ -285,6 +291,7 @@ export const MultipleImagePicker = (props: Props) => {
           style={{
             width: deviceWidth,
             height: deviceHeight,
+            backgroundColor: '#000',
           }}>
           <View style={styles.previewView}>
             {selectedFulfilledUrls.length ? (

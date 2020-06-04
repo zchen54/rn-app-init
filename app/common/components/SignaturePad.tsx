@@ -38,8 +38,8 @@ const deleteImg = require('../../assets/images/template/delete-gray.png');
 interface Props {
   source: string;
   pickerStyle?: any;
-  handleConfirm: (source: string) => void;
-  authToken: string;
+  handleConfirm: (value: string) => void;
+  authToken?: string;
 }
 export const SignaturePad = (props: Props) => {
   const {source, pickerStyle, handleConfirm, authToken} = props;
@@ -107,16 +107,16 @@ export const SignaturePad = (props: Props) => {
   }
 
   function saveSign() {
-    signatureRef.saveImage();
+    signatureRef.current.saveImage();
   }
 
   function resetSign() {
-    signatureRef.resetImage();
+    signatureRef.current.resetImage();
   }
 
   function _onSaveEvent(result: any) {
     // console.log(result);
-    if (connected) {
+    if (connected && authToken) {
       uploadImage(
         API_v2.uploadFile,
         ['file://' + result.pathName],
