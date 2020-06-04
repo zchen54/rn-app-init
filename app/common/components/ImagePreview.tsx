@@ -33,31 +33,26 @@ export const ImagePreview = (props: Props) => {
   }
 
   return (
-    <View
-      style={{
-        padding: 10,
-      }}>
-      <Modal
-        popup
-        visible={visible}
-        transparent={false}
-        animationType="slide-up"
-        onClose={onClose}>
-        <View
-          style={{
-            width: deviceWidth,
-            height: deviceHeight,
-          }}>
-          <ImageViewer
-            imageUrls={imageUrls}
-            index={index}
-            enableSwipeDown={true}
-            onSwipeDown={onClose}
-            onClick={onClose}
-            saveToLocalByLongPress={false}
-          />
-        </View>
-      </Modal>
-    </View>
+    <Modal
+      popup
+      visible={visible}
+      transparent={false}
+      animationType="slide-up"
+      onClose={onClose}>
+      <View
+        style={{
+          width: deviceWidth,
+          height: deviceHeight,
+        }}>
+        <ImageViewer
+          imageUrls={imageUrls}
+          index={index}
+          enableSwipeDown={true}
+          onSwipeDown={onClose}
+          onClick={onClose}
+          saveToLocalByLongPress={false}
+        />
+      </View>
+    </Modal>
   );
 };

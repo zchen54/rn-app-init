@@ -44,10 +44,8 @@ const AppWrapper = (props: Props) => {
     const {isDebugMode, isBetaMode} = props.initialProperties;
     console.log('AppWrapper props', props);
 
-    console.log('isDebugMode', isDebugMode);
-    console.log('isBetaMode', isBetaMode);
     const {versionName, versionCode} = props.initialProperties;
-    console.log('versionName, versionCode', versionName, versionCode);
+
     if (Platform.OS === PlatFormAndroid) {
       let isRelease = !isDebugMode && !isBetaMode;
       setReleaseMode(isRelease);
@@ -61,7 +59,7 @@ const AppWrapper = (props: Props) => {
   function getVersion() {
     if (Platform.OS === PlatFormAndroid) {
       const {versionName, versionCode} = props.initialProperties;
-      handleCheckNewVersion(versionName, versionCode);
+      // handleCheckNewVersion(versionName, versionCode);
       setVersionName(versionName);
       setVersionCode(versionCode);
     } else {
@@ -72,9 +70,7 @@ const AppWrapper = (props: Props) => {
           versionCode: number,
           bundleId: string,
         ) => {
-          console.log(
-            `getAppVersion--- ${versionName} ${versionCode} ${bundleId}`,
-          );
+          // console.log(`getAppVersion ${versionName} ${versionCode} ${bundleId}`);
           if (bundleId) {
             let isRelease = bundleId.indexOf('beta') < 0;
             setReleaseMode(isRelease);
@@ -122,7 +118,6 @@ const AppWrapper = (props: Props) => {
     setUpdateModalVisible(false);
   }
 
-  console.log('render props---', props);
   console.log('serverURL is: ', serverURL);
   const iphoneSafeAreaStyle = {
     flex: 1,
@@ -180,7 +175,7 @@ const AppWrapper = (props: Props) => {
           handleCloseModal={closeControllerModal}
         />
       </SafeAreaView>
-      <SafeAreaView style={{flex: 0, backgroundColor: safeAreaBottomColor}} />
+      {/* <SafeAreaView style={{flex: 0, backgroundColor: safeAreaBottomColor}} /> */}
     </Fragment>
   );
 };

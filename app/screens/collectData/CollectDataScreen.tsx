@@ -7,6 +7,7 @@ import {
   SafeAreaView,
   StatusBar,
   BackHandler,
+  ScrollView,
 } from 'react-native';
 import {Toast, Icon, Modal, Button} from '@ant-design/react-native';
 import {openActionSheet} from '../../store/actions';
@@ -71,88 +72,90 @@ const CollectDataScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <Button
-        onPress={() => {
-          dispatch(openActionSheet(actionsMock));
-        }}>
-        Open ActionSheet
-      </Button>
-      <FormItem label="Single Image Picker">
-        <SingleImagePicker
-          source={formData.singleImgSource}
-          pickerStyle={{
-            backgroundColor: '#f2f2f2',
-          }}
-          handleSelect={(value: string) => {
-            setFormData({
-              ...formData,
-              singleImgSource: value,
-            });
-          }}
-          authToken={undefined}
-        />
-      </FormItem>
-      <FormItem label="Multiple Image Picker">
-        <MultipleImagePicker
-          source={formData.multipleImgSource}
-          pickerStyle={{
-            backgroundColor: '#f2f2f2',
-          }}
-          handleSelect={(value: string) => {
-            setFormData({
-              ...formData,
-              multipleImgSource: value,
-            });
-          }}
-          authToken={undefined}
-          multiple={true}
-          maxFiles={3}
-        />
-      </FormItem>
-      <FormItem label="Single Video Picker">
-        <VideoPicker
-          source={formData.singleVideoSource}
-          durationLimit={15}
-          handleSelect={(value: string) => {
-            setFormData({
-              ...formData,
-              singleVideoSource: value,
-            });
-          }}
-          authToken={undefined}
-        />
-      </FormItem>
-      <FormItem label="Multiple Video Picker">
-        <MultipleVideoPicker
-          source={formData.multipleVideoSource}
-          durationLimit={15}
-          handleSelect={(value: string) => {
-            setFormData({
-              ...formData,
-              multipleVideoSource: value,
-            });
-          }}
-          authToken={undefined}
-          maxFiles={2}
-        />
-      </FormItem>
-      <FormItem label="Signature">
-        <SignaturePad
-          source={formData.signatureSource}
-          pickerStyle={
-            {
-              // backgroundColor: '#f2f2f2',
+      <ScrollView>
+        <Button
+          onPress={() => {
+            dispatch(openActionSheet(actionsMock));
+          }}>
+          Open ActionSheet
+        </Button>
+        <FormItem label="Single Image Picker">
+          <SingleImagePicker
+            source={formData.singleImgSource}
+            pickerStyle={{
+              backgroundColor: '#f2f2f2',
+            }}
+            handleSelect={(value: string) => {
+              setFormData({
+                ...formData,
+                singleImgSource: value,
+              });
+            }}
+            authToken={undefined}
+          />
+        </FormItem>
+        <FormItem label="Multiple Image Picker">
+          <MultipleImagePicker
+            source={formData.multipleImgSource}
+            pickerStyle={{
+              backgroundColor: '#f2f2f2',
+            }}
+            handleSelect={(value: string) => {
+              setFormData({
+                ...formData,
+                multipleImgSource: value,
+              });
+            }}
+            authToken={undefined}
+            multiple={true}
+            maxFiles={3}
+          />
+        </FormItem>
+        <FormItem label="Single Video Picker">
+          <VideoPicker
+            source={formData.singleVideoSource}
+            durationLimit={15}
+            handleSelect={(value: string) => {
+              setFormData({
+                ...formData,
+                singleVideoSource: value,
+              });
+            }}
+            authToken={undefined}
+          />
+        </FormItem>
+        <FormItem label="Multiple Video Picker">
+          <MultipleVideoPicker
+            source={formData.multipleVideoSource}
+            durationLimit={15}
+            handleSelect={(value: string) => {
+              setFormData({
+                ...formData,
+                multipleVideoSource: value,
+              });
+            }}
+            authToken={undefined}
+            maxFiles={2}
+          />
+        </FormItem>
+        <FormItem label="Signature">
+          <SignaturePad
+            source={formData.signatureSource}
+            pickerStyle={
+              {
+                // backgroundColor: '#f2f2f2',
+              }
             }
-          }
-          handleConfirm={(value: string) => {
-            setFormData({
-              ...formData,
-              signatureSource: value,
-            });
-          }}
-          authToken={undefined}
-        />
-      </FormItem>
+            handleConfirm={(value: string) => {
+              setFormData({
+                ...formData,
+                signatureSource: value,
+              });
+            }}
+            authToken={undefined}
+          />
+        </FormItem>
+      </ScrollView>
     </SafeAreaView>
   );
 };

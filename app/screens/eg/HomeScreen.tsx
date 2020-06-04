@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,13 @@ interface Props {
 
 const HomeScreen = (props: Props) => {
   const {navigation, route} = props;
+
+  useEffect(() => {
+    setTimeout(() => {
+      console.log('update releaseMode', releaseMode);
+    }, 100);
+  }, [releaseMode]);
+
   navigation.setOptions({
     headerLeft: (props: any) => (
       <HeaderBackButton

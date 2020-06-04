@@ -22,10 +22,10 @@ interface Props {
   authToken?: string;
 }
 
+let loadingToastKey: any = null;
 export const VideoPicker = (props: Props) => {
   const {source, durationLimit, handleSelect, authToken} = props;
   const [selectVideoSource, setSelectVideoSource] = useState('');
-  let loadingToastKey: any = null;
 
   useEffect(() => {
     return () => {
@@ -73,7 +73,7 @@ export const VideoPicker = (props: Props) => {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setSelectVideoSource(response.uri);
-        loadingToastKey = Toast.loading('Loading...', 0);
+        loadingToastKey = Toast.loading('Loading...3s', 0);
       }
     });
   }
@@ -132,7 +132,7 @@ export const VideoPicker = (props: Props) => {
       {
         text: 'OK',
         onPress: () => {
-          handleSelect('', null);
+          handleSelect('');
         },
       },
     ]);

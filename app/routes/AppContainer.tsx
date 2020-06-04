@@ -68,51 +68,49 @@ const BottomTabScreen = () => (
 const App = () => {
   const routeNameRef = React.useRef();
   return (
-    <>
-      <NavigationContainer
-        ref={navigationRef}
-        onStateChange={state => {
-          const previousRouteName = routeNameRef.current;
-          const currentRouteName = getActiveRouteName(state);
-          if (previousRouteName !== currentRouteName) {
-            console.log('[onStateChange]', currentRouteName);
-            if (currentRouteName === 'HomeScreen') {
-              StatusBar.setBarStyle('dark-content'); // 修改 StatusBar
-            } else {
-              StatusBar.setBarStyle('dark-content'); // 修改 StatusBar
-            }
+    <NavigationContainer
+      ref={navigationRef}
+      onStateChange={state => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = getActiveRouteName(state);
+        if (previousRouteName !== currentRouteName) {
+          console.log('[onStateChange]', currentRouteName);
+          if (currentRouteName === 'HomeScreen') {
+            StatusBar.setBarStyle('dark-content'); // 修改 StatusBar
+          } else {
+            StatusBar.setBarStyle('dark-content'); // 修改 StatusBar
           }
-          // Save the current route name for later comparision
-          routeNameRef.current = currentRouteName;
-        }}>
-        <Stack.Navigator
-          initialRouteName="HomeScreen"
-          // 页面共享的配置
-          screenOptions={getScreenOptions()}>
-          <Stack.Screen
-            name="BottomTabScreen"
-            component={BottomTabScreen}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen
-            name="DetailsScreen"
-            component={DetailsScreen}
-            options={{headerTitle: '详情'}} // headerTitle 用来设置标题栏
-            initialParams={{itemId: 42}} // 默认参数
-          />
-          <Stack.Screen
-            name="SafeAreaViewScreen"
-            component={SafeAreaViewScreen}
-            options={{headerTitle: 'SafeAreaView'}}
-          />
-          <Stack.Screen
-            name="CustomAndroidBackButtonBehaviorScreen"
-            component={CustomAndroidBackButtonBehaviorScreen}
-            options={{headerTitle: '拦截安卓物理返回键'}}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </>
+        }
+        // Save the current route name for later comparision
+        routeNameRef.current = currentRouteName;
+      }}>
+      <Stack.Navigator
+        initialRouteName="HomeScreen"
+        // 页面共享的配置
+        screenOptions={getScreenOptions()}>
+        <Stack.Screen
+          name="BottomTabScreen"
+          component={BottomTabScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DetailsScreen"
+          component={DetailsScreen}
+          options={{headerTitle: '详情'}} // headerTitle 用来设置标题栏
+          initialParams={{itemId: 42}} // 默认参数
+        />
+        <Stack.Screen
+          name="SafeAreaViewScreen"
+          component={SafeAreaViewScreen}
+          options={{headerTitle: 'SafeAreaView'}}
+        />
+        <Stack.Screen
+          name="CustomAndroidBackButtonBehaviorScreen"
+          component={CustomAndroidBackButtonBehaviorScreen}
+          options={{headerTitle: '拦截安卓物理返回键'}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 

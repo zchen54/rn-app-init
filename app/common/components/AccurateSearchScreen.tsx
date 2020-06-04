@@ -183,7 +183,7 @@ class AccurateSearchScreen extends Component<Props, State> {
 
   render() {
     const {searchValue, history} = this.state;
-    StatusBar.setBarStyle('dark-content', true);
+    // StatusBar.setBarStyle('dark-content', true);
     return (
       <View style={styles.normal}>
         <View style={styles.searchWrapper}>
