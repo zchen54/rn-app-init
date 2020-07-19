@@ -33,7 +33,7 @@
     "buffer": "^5.5.0",
     "dayjs": "^1.8.28",
     "jimp": "^0.9.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "qrcode-reader": "^1.0.4",
     "react": "16.9.0",
     "react-native": "0.61.5",
