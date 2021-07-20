@@ -36,7 +36,7 @@
     "lodash": "^4.17.15",
     "qrcode-reader": "^1.0.4",
     "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react-native": "0.62.3",
     "react-native-bootsplash": "^2.1.0",
     "react-native-camera": "^3.21.0",
     "react-native-clear-cache": "https://github.com/zchen54/react-native-clear-cache.git",
